@@ -1,11 +1,16 @@
 import { articles } from '../data/articles';
 
 const site = 'https://bisnis.sewaalatproyekpekanbaru.com';
+const articlesPerPage = 9;
+const totalArticlePages = Math.ceil(articles.length / articlesPerPage);
 
 export function GET() {
   const urls = [
     { loc: `${site}/` },
     { loc: `${site}/artikel/` },
+    ...Array.from({ length: Math.max(totalArticlePages - 1, 0) }, (_, index) => ({
+      loc: `${site}/artikel/page/${index + 2}/`
+    })),
     ...articles.map((article) => ({
       loc: `${site}/artikel/${article.slug}/`,
       lastmod: article.publishedDate

@@ -1,0 +1,216 @@
+---
+import type { Article } from '../data/articles';
+
+interface Props {
+  pageArticles: Article[];
+  totalArticles: number;
+  currentPage: number;
+  totalPages: number;
+}
+
+const { pageArticles, totalArticles, currentPage, totalPages } = Astro.props;
+const getPageUrl = (page: number) => (page === 1 ? '/artikel/' : `/artikel/page/${page}/`);
+const pageItems = Array.from({ length: totalPages }, (_, index) => index + 1).filter((page) => {
+  return page === 1 || page === totalPages || Math.abs(page - currentPage) <= 1;
+}).reduce<(number | string)[]>((items, page) => {
+  const previous = items.at(-1);
+
+  if (typeof previous === 'number' && page - previous > 1) {
+    items.push('...');
+  }
+
+  items.push(page);
+  return items;
+}, []);
+const formatDate = (date?: string) =>
+  date
+    ? new Intl.DateTimeFormat('id-ID', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+        timeZone: 'UTC'
+      }).format(new Date(`${date}T00:00:00.000Z`))
+    : '';
+---
+<main>
+  <section class="section article-index">
+    <div class="container">
+      <p class="eyebrow">Pusat artikel</p>
+      <h1>{totalArticles} Artikel SEO Sewa Alat Berat Pekanbaru</h1>
+      <p>Konten informatif untuk membantu memilih unit, memahami proses sewa, dan merencanakan pekerjaan konstruksi atau perkebunan di Pekanbaru.</p>
+      <div class="page-summary">
+        <span>Halaman {currentPage} dari {totalPages}</span>
+        <span>9 artikel per halaman</span>
+      </div>
+      <div class="grid">
+        {pageArticles.map((article) => (
+          <article class="card">
+            <div class="meta">
+              <span>{article.category}</span>
+              {article.publishedDate && <time datetime={article.publishedDate}>{formatDate(article.publishedDate)}</time>}
+            </div>
+            <h2><a href={`/artikel/${article.slug}`}>{article.title}</a></h2>
+            <p>{article.description}</p>
+          </article>
+        ))}
+      </div>
+
+      <nav class="pagination" aria-label="Navigasi halaman artikel">
+        <a class={currentPage === 1 ? 'disabled' : ''} href={currentPage === 1 ? undefined : getPageUrl(currentPage - 1)}>Sebelumnya</a>
+        <div>
+          {pageItems.map((item) =>
+            typeof item === 'number' ? (
+              <a class={item === currentPage ? 'active' : ''} href={getPageUrl(item)} aria-current={item === currentPage ? 'page' : undefined}>{item}</a>
+            ) : (
+              <span>{item}</span>
+            )
+          )}
+        </div>
+        <a class={currentPage === totalPages ? 'disabled' : ''} href={currentPage === totalPages ? undefined : getPageUrl(currentPage + 1)}>Berikutnya</a>
+      </nav>
+    </div>
+  </section>
+</main>
+
+<style>
+  .article-index {
+    background: #ffffff;
+  }
+
+  h1 {
+    max-width: 850px;
+    margin: 0;
+    font-size: clamp(2.4rem, 5vw, 4.6rem);
+    line-height: 1;
+    letter-spacing: 0;
+  }
+
+  .article-index > .container > p:not(.eyebrow) {
+    max-width: 720px;
+    color: var(--muted);
+    font-size: 1.08rem;
+  }
+
+  .page-summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 22px;
+    color: var(--muted);
+    font-size: 0.94rem;
+    font-weight: 750;
+  }
+
+  .page-summary span {
+    padding: 7px 10px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #f7f9f6;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-top: 32px;
+  }
+
+  article {
+    padding: 22px;
+  }
+
+  .meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+
+  article span {
+    color: var(--green-2);
+    font-size: 0.8rem;
+    font-weight: 900;
+    text-transform: uppercase;
+  }
+
+  time {
+    color: var(--muted);
+    font-size: 0.82rem;
+    font-weight: 750;
+    white-space: nowrap;
+  }
+
+  h2 {
+    margin: 0 0 10px;
+    font-size: 1.2rem;
+    line-height: 1.28;
+  }
+
+  h2 a:hover {
+    color: var(--green-2);
+  }
+
+  article p {
+    margin: 0;
+    color: var(--muted);
+  }
+
+  .pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 34px;
+  }
+
+  .pagination div {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .pagination a,
+  .pagination span {
+    display: inline-flex;
+    min-width: 42px;
+    min-height: 42px;
+    align-items: center;
+    justify-content: center;
+    padding: 0 12px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #ffffff;
+    color: var(--green);
+    font-weight: 850;
+  }
+
+  .pagination span {
+    border-color: transparent;
+    background: transparent;
+    color: var(--muted);
+  }
+
+  .pagination a.active {
+    border-color: var(--green);
+    background: var(--green);
+    color: #ffffff;
+  }
+
+  .pagination a.disabled {
+    pointer-events: none;
+    opacity: 0.45;
+  }
+
+  @media (max-width: 900px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+
+    .pagination {
+      align-items: stretch;
+      flex-direction: column;
+    }
+  }
+</style>

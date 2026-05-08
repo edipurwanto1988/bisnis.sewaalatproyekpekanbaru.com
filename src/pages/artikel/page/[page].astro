@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ArticleIndexContent from '../../../components/ArticleIndexContent.astro';
+import { articles } from '../../../data/articles';
+
+const articlesPerPage = 9;
+const totalPages = Math.ceil(articles.length / articlesPerPage);
+
+export function getStaticPaths() {
+  const pathArticlesPerPage = 9;
+  const pathTotalPages = Math.ceil(articles.length / pathArticlesPerPage);
+
+  return Array.from({ length: Math.max(pathTotalPages - 1, 0) }, (_, index) => {
+    const currentPage = index + 2;
+    const start = (currentPage - 1) * pathArticlesPerPage;
+
+    return {
+      params: { page: String(currentPage) },
+      props: {
+        currentPage,
+        pageArticles: articles.slice(start, start + pathArticlesPerPage)
+      }
+    };
+  });
+}
+
+const { currentPage, pageArticles } = Astro.props;
+---
+<BaseLayout
+  title={`Artikel SEO Sewa Alat Berat Halaman ${currentPage}`}
+  description={`Halaman ${currentPage} artikel SEO tentang sewa alat berat Pekanbaru, alat proyek, konstruksi, perkebunan, jalan, aspal, beton, dan industri.`}
+>
+  <ArticleIndexContent
+    pageArticles={pageArticles}
+    totalArticles={articles.length}
+    currentPage={currentPage}
+    totalPages={totalPages}
+  />
+</BaseLayout>
