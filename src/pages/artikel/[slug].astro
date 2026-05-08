@@ -10,7 +10,7 @@ export function getStaticPaths() {
 }
 
 const { article } = Astro.props;
-const related = articles.filter((item) => item.slug !== article.slug).slice(0, 4);
+const related = articles.filter((item) => item.slug !== article.slug).slice(0, 10);
 const getHeadingId = (text: string) =>
   text
     .toLowerCase()
