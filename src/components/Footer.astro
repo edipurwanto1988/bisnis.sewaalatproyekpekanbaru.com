@@ -1,5 +1,5 @@
 ---
-import { articles, heavyEquipment } from '../data/articles';
+import { articles } from '../data/articles';
 ---
 <footer id="kontak" class="site-footer">
   <div class="container footer-grid">
@@ -23,9 +23,6 @@ import { articles, heavyEquipment } from '../data/articles';
         {articles.slice(0, 5).map((article) => <li><a href={`/artikel/${article.slug}`}>{article.keyword}</a></li>)}
       </ul>
     </section>
-  </div>
-  <div class="container equipment-line">
-    <strong>Unit:</strong> {heavyEquipment.join(', ')}
   </div>
   <div class="container copyright">
     <span>© 2026 Sewa Alat Berat Pekanbaru.</span>
@@ -86,18 +83,6 @@ import { articles, heavyEquipment } from '../data/articles';
     background: var(--lime);
     color: #10231f;
     font-weight: 900;
-  }
-
-  .equipment-line {
-    margin-top: 34px;
-    padding-top: 24px;
-    border-top: 1px solid rgba(255, 255, 255, 0.14);
-    color: #bfd0c9;
-    font-size: 0.92rem;
-  }
-
-  .equipment-line strong {
-    color: #ffffff;
   }
 
   .copyright {
