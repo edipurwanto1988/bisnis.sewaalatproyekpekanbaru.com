@@ -904,11 +904,288 @@ const getStablePublicationDate = (slug: string, index: number) => {
   return date.toISOString().slice(0, 10);
 };
 
+type MaintenanceTopic = {
+  slug: string;
+  title: string;
+  desc: string;
+  keyword: string;
+  category: string;
+  unit: string;
+};
+
+const maintenanceTopics: MaintenanceTopic[] = [
+  { slug: 'perawatan-excavator-harian', title: 'Perawatan Harian Excavator untuk Performa Optimal', desc: 'Panduan perawatan harian excavator meliputi pengecekan oli, filter, track, dan komponen hidrolik agar unit selalu siap kerja.', keyword: 'perawatan excavator', category: 'Perawatan Excavator', unit: 'excavator' },
+  { slug: 'perawatan-mesin-bulldozer', title: 'Perawatan Mesin Bulldozer yang Wajib Dilakukan', desc: 'Jadwal perawatan mesin bulldozer mencakup sistem bahan bakar, pendingin, dan pelumasan untuk mencegah breakdown di lapangan.', keyword: 'perawatan bulldozer', category: 'Perawatan Bulldozer', unit: 'bulldozer' },
+  { slug: 'service-hidrolik-crane', title: 'Service Sistem Hidrolik Crane agar Tidak Bocor', desc: 'Cara merawat sistem hidrolik crane meliputi pengecekan selang, seal, oli hidrolik, dan tekanan agar lifting aman dan stabil.', keyword: 'perawatan crane', category: 'Perawatan Crane', unit: 'crane' },
+  { slug: 'perawatan-wheel-loader-rutin', title: 'Perawatan Rutin Wheel Loader untuk Umur Panjang', desc: 'Jadwal perawatan wheel loader meliputi transmisi, axle, bucket, dan ban agar produktivitas loading tetap tinggi.', keyword: 'perawatan wheel loader', category: 'Perawatan Loader', unit: 'wheel loader' },
+  { slug: 'perawatan-vibro-roller-pemadatan', title: 'Perawatan Vibro Roller agar Pemadatan Maksimal', desc: 'Tips merawat vibro roller termasuk drum, bearing, sistem getar, dan mesin agar hasil pemadatan tanah selalu optimal.', keyword: 'perawatan vibro roller', category: 'Perawatan Compactor', unit: 'vibro roller' },
+  { slug: 'perawatan-motor-grader-jalan', title: 'Perawatan Motor Grader untuk Hasil Jalan Rata', desc: 'Panduan perawatan motor grader meliputi blade, lingkaran, transmisi, dan sistem kemudi agar perataan jalan presisi.', keyword: 'perawatan motor grader', category: 'Perawatan Grader', unit: 'motor grader' },
+  { slug: 'service-dump-truck-harian', title: 'Service Harian Dump Truck Mencegah Breakdown', desc: 'Checklist service harian dump truck meliputi mesin, ban, suspensi, bak angkut, dan sistem rem untuk keselamatan ritase.', keyword: 'perawatan dump truck', category: 'Perawatan Truck', unit: 'dump truck' },
+  { slug: 'perawatan-forklift-gudang', title: 'Perawatan Forklift di Lingkungan Gudang', desc: 'Langkah perawatan forklift gudang meliputi fork, mast, roda, baterai atau mesin, dan sistem kemudi agar handling aman.', keyword: 'perawatan forklift', category: 'Perawatan Forklift', unit: 'forklift' },
+  { slug: 'perawatan-concrete-pump-tekanan', title: 'Perawatan Concrete Pump agar Tekanan Stabil', desc: 'Jadwal perawatan concrete pump mencakup piston, pipa dorong, hopper, dan sistem hidrolik untuk pengecoran lancar.', keyword: 'perawatan concrete pump', category: 'Perawatan Beton', unit: 'concrete pump' },
+  { slug: 'perawatan-asphalt-finisher-jalan', title: 'Perawatan Asphalt Finisher untuk Hasil Aspal Rata', desc: 'Merawat asphalt finisher meliputi screed, Auger, hopper, dan sistem pemanas agar pengaspalan rata dan merata.', keyword: 'perawatan asphalt finisher', category: 'Perawatan Aspal', unit: 'asphalt finisher' },
+  { slug: 'perawatan-mini-excavator-area-sempit', title: 'Perawatan Mini Excavator di Area Sempit', desc: 'Panduan perawatan mini excavator meliputi boom, bucket, track, dan sistem hidrolik untuk pekerjaan di ruang terbatas.', keyword: 'perawatan mini excavator', category: 'Perawatan Excavator', unit: 'mini excavator' },
+  { slug: 'perawatan-long-arm-excavator-sungai', title: 'Perawatan Long Arm Excavator untuk Pengerukan Sungai', desc: 'Tips merawat long arm excavator meliputi boom panjang, pin joint, selang hidrolik, dan stabilizer saat kerja di sungai.', keyword: 'perawatan long arm excavator', category: 'Perawatan Excavator', unit: 'long arm excavator' },
+  { slug: 'perawatan-amphibious-excavator-rawa', title: 'Perawatan Amphibious Excavator di Lahan Rawa', desc: 'Jadwal perawatan amphibious excavator mencakup ponton, track seal, dan komponen anti-korosi untuk medan berair.', keyword: 'perawatan amphibious excavator', category: 'Perawatan Excavator', unit: 'amphibious excavator' },
+  { slug: 'perawatan-dozer-swamp-gambut', title: 'Perawatan Dozer Swamp di Tanah Gambut', desc: 'Merawat dozer swamp meliputi track lebar, seal hidrolik, pelumas anti-air, dan kerangka anti-korosi untuk lahan gambut.', keyword: 'perawatan dozer swamp', category: 'Perawatan Bulldozer', unit: 'dozer swamp' },
+  { slug: 'perawatan-backhoe-loader-serbaguna', title: 'Perawatan Backhoe Loader agar Tetap Serbaguna', desc: 'Panduan service backhoe loader meliputi loader bucket, backhoe arm, transmisi, dan sistem kemudi rangkap.', keyword: 'perawatan backhoe loader', category: 'Perawatan Loader', unit: 'backhoe loader' },
+  { slug: 'perawatan-skid-steer-loader', title: 'Perawatan Skid Steer Loader yang Benar', desc: 'Tips perawatan skid steer loader meliputi mesin, arm, bucket, roda, dan sistem hidrolik agar performa tetap lincah.', keyword: 'perawatan skid steer loader', category: 'Perawatan Loader', unit: 'skid steer loader' },
+  { slug: 'perawatan-tandem-roller-aspal', title: 'Perawatan Tandem Roller untuk Pemadatan Aspal', desc: 'Jadwal perawatan tandem roller mencakup drum, sprinkler, bearing, dan sistem getar agar pemadatan aspal merata.', keyword: 'perawatan tandem roller', category: 'Perawatan Compactor', unit: 'tandem roller' },
+  { slug: 'perawatan-pneumatic-tire-roller', title: 'Perawatan Pneumatic Tire Roller yang Efektif', desc: 'Merawat pneumatic tire roller meliputi ban karet, tekanan, sistem hidrolik, dan mesin agar finishing aspal optimal.', keyword: 'perawatan pneumatic tire roller', category: 'Perawatan Aspal', unit: 'pneumatic tire roller' },
+  { slug: 'perawatan-soil-compactor-timbunan', title: 'Perawatan Soil Compactor untuk Timbunan Padat', desc: 'Panduan perawatan soil compactor meliputi drum, sistem getar, track atau ban, dan mesin untuk pemadatan timbunan.', keyword: 'perawatan soil compactor', category: 'Perawatan Compactor', unit: 'soil compactor' },
+  { slug: 'perawatan-stamper-area-sempit', title: 'Perawatan Stamper untuk Pemadatan Area Sempit', desc: 'Tips merawat stamper atau jumping jack meliputi mesin bensin, plate compactor, dan sistem getar agar kerja maksimal.', keyword: 'perawatan stamper', category: 'Perawatan Compactor', unit: 'stamper' },
+  { slug: 'perawatan-mobile-crane-lifting', title: 'Perawatan Mobile Crane untuk Lifting Aman', desc: 'Jadwal perawatan mobile crane meliputi boom, wire rope, hook, outrigger, dan sistem hidrolik agar lifting selalu aman.', keyword: 'perawatan mobile crane', category: 'Perawatan Crane', unit: 'mobile crane' },
+  { slug: 'perawatan-crawler-crane-stabil', title: 'Perawatan Crawler Crane agar Stabil dan Kuat', desc: 'Merawat crawler crane meliputi track, boom, winch, dan counterweight untuk pengangkatan berat yang stabil dan aman.', keyword: 'perawatan crawler crane', category: 'Perawatan Crane', unit: 'crawler crane' },
+  { slug: 'perawatan-tower-crane-gedung', title: 'Perawatan Tower Crane pada Proyek Gedung', desc: 'Panduan perawatan tower crane mencakup mast, jib, trolley, hoist, dan braking system untuk lifting vertikal aman.', keyword: 'perawatan tower crane', category: 'Perawatan Crane', unit: 'tower crane' },
+  { slug: 'perawatan-telehandler-industri', title: 'Perawatan Telehandler di Area Industri', desc: 'Tips service telehandler meliputi boom teleskopik, fork, stabilizer, dan transmisi agar handling material aman.', keyword: 'perawatan telehandler', category: 'Perawatan Forklift', unit: 'telehandler' },
+  { slug: 'perawatan-tronton-angkutan', title: 'Perawatan Tronton untuk Angkutan Material', desc: 'Jadwal perawatan tronton meliputi mesin, suspensi, bak, dan rem agar angkutan material berat tetap aman dan efisien.', keyword: 'perawatan tronton', category: 'Perawatan Truck', unit: 'tronton' },
+  { slug: 'perawatan-water-truck-proyek', title: 'Perawatan Water Truck untuk Proyek Konstruksi', desc: 'Merawat water truck meliputi tanki, pompa, nozzle, dan pipa agar penyiraman jalan dan kontrol debu berjalan lancar.', keyword: 'perawatan water truck', category: 'Perawatan Truck', unit: 'water truck' },
+  { slug: 'perawatan-concrete-mixer-truck', title: 'Perawatan Concrete Mixer Truck agar Beton Segar', desc: 'Panduan perawatan concrete mixer truck meliputi drum, chutes, hidrolik, dan sistem air agar beton tetap segar saat tiba.', keyword: 'perawatan concrete mixer truck', category: 'Perawatan Beton', unit: 'concrete mixer truck' },
+  { slug: 'perawatan-asphalt-sprayer-tack', title: 'Perawatan Asphalt Sprayer untuk Tack Coat', desc: 'Merawat asphalt sprayer meliputi tanki, pompa, nozzle, dan sistem pemanas agar penyemprotan aspal merata dan presisi.', keyword: 'perawatan asphalt sprayer', category: 'Perawatan Aspal', unit: 'asphalt sprayer' },
+  { slug: 'perawatan-cold-milling-machine', title: 'Perawatan Cold Milling Machine untuk Kupas Aspal', desc: 'Jadwal perawatan cold milling machine meliputi drum cutter, teeth, conveyor, dan sistem hidrolik agar milling presisi.', keyword: 'perawatan cold milling machine', category: 'Perawatan Aspal', unit: 'cold milling machine' },
+  { slug: 'perawatan-genset-proyek', title: 'Perawatan Genset untuk Supply Listrik Proyek', desc: 'Tips perawatan genset meliputi mesin diesel, radiator, alternator, dan panel kontrol agar kelistrikan proyek stabil.', keyword: 'perawatan genset', category: 'Perawatan Power', unit: 'genset' },
+  { slug: 'perawatan-compressor-udara', title: 'Perawatan Compressor agar Tekanan Udara Stabil', desc: 'Panduan perawatan compressor meliputi filter udara, oli, belt, dan tanki agar pasokan udara tekan stabil dan aman.', keyword: 'perawatan compressor', category: 'Perawatan Power', unit: 'compressor' },
+  { slug: 'perawatan-pile-driver-pondasi', title: 'Perawatan Pile Driver untuk Pemancangan Aman', desc: 'Merawat pile driver meliputi hammer, lead, winch, dan sistem hidrolik agar pondasi tiang pancang kuat dan presisi.', keyword: 'perawatan pile driver', category: 'Perawatan Pondasi', unit: 'pile driver' },
+  { slug: 'perawatan-bor-pile-machine', title: 'Perawatan Bor Pile Machine agar Boring Presisi', desc: 'Jadwal perawatan bor pile machine meliputi kelly bar, bucket, rotary, dan sistem hidrolik agar pengeboran presisi dan aman.', keyword: 'perawatan bor pile machine', category: 'Perawatan Pondasi', unit: 'bor pile machine' },
+  { slug: 'perawatan-scissor-lift-tinggi', title: 'Perawatan Scissor Lift untuk Pekerjaan Ketinggian', desc: 'Tips service scissor lift meliputi platform, silinder hidrolik, limit switch, dan safety sensor agar akses tinggi aman.', keyword: 'perawatan scissor lift', category: 'Perawatan Akses Tinggi', unit: 'scissor lift' },
+  { slug: 'perawatan-boom-lift-reach', title: 'Perawatan Boom Lift agar Jangkauan Maksimal', desc: 'Merawat boom lift meliputi boom section, turntable, outrigger, dan sistem kontrol agar jangkauan tinggi aman.', keyword: 'perawatan boom lift', category: 'Perawatan Akses Tinggi', unit: 'boom lift' },
+  { slug: 'perawatan-undercarriage-excavator', title: 'Perawatan Undercarriage Excavator agar Awet', desc: 'Panduan lengkap perawatan undercarriage excavator meliputi track chain, roller, idler, sprocket, dan shoe.', keyword: 'perawatan undercarriage excavator', category: 'Perawatan Undercarriage', unit: 'excavator' },
+  { slug: 'perawatan-undercarriage-bulldozer', title: 'Perawatan Undercarriage Bulldozer di Medan Berat', desc: 'Tips merawat undercarriage bulldozer meliputi track link, bushing, carrier roller, dan shoe agar tahan medan berat.', keyword: 'perawatan undercarriage bulldozer', category: 'Perawatan Undercarriage', unit: 'bulldozer' },
+  { slug: 'ganti-oli-hidrolik-alat-berat', title: 'Panduan Ganti Oli Hidrolik Alat Berat yang Benar', desc: 'Cara mengganti oli hidrolik pada excavator, loader, crane, dan alat berat lain meliputi jenis oli, interval, dan langkah penggantian.', keyword: 'ganti oli hidrolik alat berat', category: 'Pelumasan', unit: 'semua alat berat' },
+  { slug: 'ganti-oli-mesin-alat-berat', title: 'Jadwal Ganti Oli Mesin Alat Berat Sesuai Standar', desc: 'Interval penggantian oli mesin excavator, bulldozer, dump truck, dan alat berat lain sesuai rekomendasi pabrikan.', keyword: 'ganti oli mesin alat berat', category: 'Pelumasan', unit: 'semua alat berat' },
+  { slug: 'perawatan-filter-udara-alat-berat', title: 'Perawatan Filter Udara Alat Berat di Area Debu', desc: 'Cara merawat dan mengganti filter udara mesin pada excavator, loader, dan alat berat yang bekerja di area debu tinggi.', keyword: 'perawatan filter udara alat berat', category: 'Sistem Intake', unit: 'semua alat berat' },
+  { slug: 'perawatan-filter-oli-alat-berat', title: 'Perawatan Filter Oli Alat Berat agar Mesin Awet', desc: 'Panduan pemilihan dan penggantian filter oli mesin dan hidrolik pada alat berat untuk mencegah keausan komponen.', keyword: 'perawatan filter oli alat berat', category: 'Pelumasan', unit: 'semua alat berat' },
+  { slug: 'perawatan-radiator-alat-berat', title: 'Perawatan Radiator Alat Berat Mencegah Overheating', desc: 'Cara merawat radiator dan sistem pendingin mesin alat berat agar suhu kerja stabil dan mencegah overheating.', keyword: 'perawatan radiator alat berat', category: 'Sistem Pendingin', unit: 'semua alat berat' },
+  { slug: 'perawatan-sistem-bahan-bakar-alat-berat', title: 'Perawatan Sistem Bahan Bakar Alat Berat Diesel', desc: 'Jadwal perawatan sistem bahan bakar mesin diesel alat berat meliputi filter, injector, pump, dan tangki.', keyword: 'perawatan sistem bahan bakar alat berat', category: 'Sistem BBM', unit: 'semua alat berat' },
+  { slug: 'perawatan-ban-alat-berat', title: 'Perawatan Ban Alat Berat untuk Keselamatan Kerja', desc: 'Tips perawatan ban wheel loader, dump truck, grader, dan alat berat beroda meliputi tekanan, alignment, dan keausan.', keyword: 'perawatan ban alat berat', category: 'Perawatan Ban', unit: 'alat berat beroda' },
+  { slug: 'perawatan-rem-alat-berat', title: 'Perawatan Sistem Rem Alat Berat yang Kritis', desc: 'Panduan perawatan sistem rem pada excavator, dump truck, loader, dan crane mulai dari brake pad hingga brake fluid.', keyword: 'perawatan rem alat berat', category: 'Sistem Rem', unit: 'semua alat berat' },
+  { slug: 'perawatan-sistem-kelistrikan-alat-berat', title: 'Perawatan Sistem Kelistrikan Alat Berat Modern', desc: 'Cara merawat sistem kelistrikan alat berat meliputi baterai, alternator, sensor, ECM, dan wiring harness.', keyword: 'perawatan kelistrikan alat berat', category: 'Sistem Elektrik', unit: 'semua alat berat' },
+  { slug: 'perawatan-selang-hidrolik-alat-berat', title: 'Perawatan Selang Hidrolik Alat Berat Mencegah Kebocoran', desc: 'Tips inspeksi dan penggantian selang hidrolik pada excavator, crane, dan loader untuk mencegah kebocoran tekanan tinggi.', keyword: 'perawatan selang hidrolik alat berat', category: 'Sistem Hidrolik', unit: 'semua alat berat' },
+  { slug: 'perawatan-sil-hidrolik-alat-berat', title: 'Penggantian Seal dan Silinder Hidrolik Alat Berat', desc: 'Kapan mengganti seal dan silinder hidrolik pada alat berat serta dampak kebocoran terhadap performa dan keselamatan.', keyword: 'ganti seal hidrolik alat berat', category: 'Sistem Hidrolik', unit: 'semua alat berat' },
+  { slug: 'perawatan-bucket-excavator', title: 'Perawatan Bucket Excavator agar Gali Efisien', desc: 'Tips merawat bucket excavator meliputi gigi, pin, bushing, dan cutting edge agar galian tetap efisien dan presisi.', keyword: 'perawatan bucket excavator', category: 'Perawatan Attachment', unit: 'excavator' },
+  { slug: 'perawatan-blade-bulldozer', title: 'Perawatan Blade Bulldozer untuk Dorongan Maksimal', desc: 'Panduan perawatan blade bulldozer meliputi cutting edge, pin, bushing, dan silinder hidrolik agar dorong tanah efisien.', keyword: 'perawatan blade bulldozer', category: 'Perawatan Attachment', unit: 'bulldozer' },
+  { slug: 'perawatan-wire-rope-crane', title: 'Perawatan Wire Rope Crane agar Lifting Aman', desc: 'Jadwal inspeksi dan perawatan wire rope crane meliputi lubricasi, pengecekan putus, swell, dan kriteria penggantian.', keyword: 'perawatan wire rope crane', category: 'Perawatan Crane', unit: 'crane' },
+  { slug: 'perawatan-transmisi-alat-berat', title: 'Perawatan Transmisi Alat Berat Otomatis dan Manual', desc: 'Panduan perawatan transmisi powershift dan manual pada alat berat meliputi oli, filter, clutch, dan torque converter.', keyword: 'perawatan transmisi alat berat', category: 'Sistem Transmisi', unit: 'semua alat berat' },
+  { slug: 'perawatan-axle-dump-truck', title: 'Perawatan Axle dan Differential Dump Truck', desc: 'Jadwal perawatan axle dan differential dump truck meliputi oli gear, bearing, dan seal agar angkutan aman.', keyword: 'perawatan axle dump truck', category: 'Sistem Transmisi', unit: 'dump truck' },
+  { slug: 'perawatan-sistem-kemudi-alat-berat', title: 'Perawatan Sistem Kemudi Alat Berat yang Presisi', desc: 'Cara merawat sistem kemudi hidrolik pada excavator, loader, grader, dan dump truck agar manuver presisi dan aman.', keyword: 'perawatan sistem kemudi alat berat', category: 'Sistem Kemudi', unit: 'semua alat berat' },
+  { slug: 'perawatan-bodi-chasis-alat-berat', title: 'Perawatan Bodi dan Chasis Alat Berat Anti Karat', desc: 'Tips merawat bodi dan chasis alat berat meliputi pembersihan, pengecatan anti-karat, dan inspeksi retak pada frame.', keyword: 'perawatan bodi chasis alat berat', category: 'Perawatan Struktural', unit: 'semua alat berat' },
+  { slug: 'perawatan-lowbed-trailer', title: 'Perawatan Lowbed Trailer untuk Mobilisasi Aman', desc: 'Jadwal perawatan lowbed trailer meliputi ban, rem, suspensi, gooseneck, dan rangka agar mobilisasi alat berat aman.', keyword: 'perawatan lowbed trailer', category: 'Perawatan Mobilisasi', unit: 'lowbed trailer' },
+  { slug: 'perawatan-forklift-elektrik', title: 'Perawatan Forklift Elektrik di Gudang', desc: 'Tips perawatan forklift elektrik meliputi baterai, charger, motor, dan komponen kontrol agar performa handling stabil.', keyword: 'perawatan forklift elektrik', category: 'Perawatan Forklift', unit: 'forklift elektrik' },
+  { slug: 'perawatan-forklift-diesel-outdoor', title: 'Perawatan Forklift Diesel untuk Area Outdoor', desc: 'Jadwal perawatan forklift diesel meliputi mesin, transmisi, mast, dan ban untuk handling outdoor yang andal.', keyword: 'perawatan forklift diesel', category: 'Perawatan Forklift', unit: 'forklift diesel' },
+  { slug: 'troubleshooting-mesin-alat-berat', title: 'Troubleshooting Mesin Alat Berat yang Sering Mati', desc: 'Panduan diagnosa dan memperbaiki mesin alat berat yang sering mati, sulit start, atau loss power di lapangan.', keyword: 'troubleshooting mesin alat berat', category: 'Troubleshooting', unit: 'semua alat berat' },
+  { slug: 'troubleshooting-hidrolik-alat-berat', title: 'Troubleshooting Sistem Hidrolik Alat Berat Lemah', desc: 'Cara mendiagnosa masalah hidrolik alat berat yang lambat, tidak kuat, atau bocor beserta langkah perbaikannya.', keyword: 'troubleshooting hidrolik alat berat', category: 'Troubleshooting', unit: 'semua alat berat' },
+  { slug: 'troubleshooting-overheating-alat-berat', title: 'Troubleshooting Overheating Alat Berat di Lapangan', desc: 'Penyebab dan solusi overheating pada excavator, bulldozer, dan loader meliputi radiator, coolant, dan water pump.', keyword: 'overheating alat berat', category: 'Troubleshooting', unit: 'semua alat berat' },
+  { slug: 'troubleshooting-transmisi-alat-berat', title: 'Troubleshooting Transmisi Alat Berat yang Slip', desc: 'Diagnosa dan perbaikan masalah transmisi pada alat berat meliputi slipping, hard shift, dan abnormal noise.', keyword: 'troubleshooting transmisi alat berat', category: 'Troubleshooting', unit: 'semua alat berat' },
+  { slug: 'troubleshooting-rem-alat-berat', title: 'Troubleshooting Sistem Rem Alat Berat yang Kurang Pakem', desc: 'Cara mendiagnosa dan memperbaiki masalah rem alat berat yang tidak pakem, spongy, atau berisik saat operasi.', keyword: 'troubleshooting rem alat berat', category: 'Troubleshooting', unit: 'semua alat berat' },
+  { slug: 'perawatan-preventif-alat-berat', title: 'Perawatan Preventif Alat Berat yang Menghemat Biaya', desc: 'Panduan perawatan preventif alat berat meliputi jadwal inspeksi, penggantian berkala, dan pencatatan untuk mengurangi downtime.', keyword: 'perawatan preventif alat berat', category: 'Perawatan Preventif', unit: 'semua alat berat' },
+  { slug: 'perawatan-prediktif-alat-berat', title: 'Perawatan Prediktif Alat Berat dengan Monitoring', desc: 'Cara menerapkan perawatan prediktif pada alat berat menggunakan data oli, getaran, temperatur, dan jam operasi.', keyword: 'perawatan prediktif alat berat', category: 'Perawatan Prediktif', unit: 'semua alat berat' },
+  { slug: 'jadwal-service-250-jam-alat-berat', title: 'Jadwal Service 250 Jam Alat Berat Lengkap', desc: 'Checklist service 250 jam alat berat meliputi ganti oli, filter, grease, dan inspeksi komponen kritis sesuai buku panduan.', keyword: 'service 250 jam alat berat', category: 'Jadwal Service', unit: 'semua alat berat' },
+  { slug: 'jadwal-service-500-jam-alat-berat', title: 'Jadwal Service 500 Jam Alat Berat yang Wajib Dilakukan', desc: 'Checklist service 500 jam meliputi penggantian oli transmisi, filter hidrolik, coolant, dan inspeksi menyeluruh.', keyword: 'service 500 jam alat berat', category: 'Jadwal Service', unit: 'semua alat berat' },
+  { slug: 'jadwal-service-1000-jam-alat-berat', title: 'Jadwal Service 1000 Jam Alat Berat dan Overhaul Ringan', desc: 'Panduan service 1000 jam meliputi overhaul ringan, penggantian komponen aus, dan penyetelan ulang mesin alat berat.', keyword: 'service 1000 jam alat berat', category: 'Jadwal Service', unit: 'semua alat berat' },
+  { slug: 'jadwal-service-2000-jam-alat-berat', title: 'Jadwal Service 2000 Jam Alat Berat dan Overhaul Berat', desc: 'Checklist service 2000 jam meliputi overhaul mesin, transmisi, hidrolik, dan undercarriage secara menyeluruh.', keyword: 'service 2000 jam alat berat', category: 'Jadwal Service', unit: 'semua alat berat' },
+  { slug: 'perawatan-grease-alat-berat', title: 'Panduan Greasing Alat Berat yang Benar dan Rutin', desc: 'Titik grease, jenis grease, dan interval pelumasan pada excavator, loader, crane, dan alat berat lainnya.', keyword: 'greasing alat berat', category: 'Pelumasan', unit: 'semua alat berat' },
+  { slug: 'perawatan-baterai-alat-berat', title: 'Perawatan Baterai Alat Berat agar Start Selalu Lancar', desc: 'Cara merawat baterai mesin alat berat meliputi terminal, elektrolit, pengisian, dan penggantian berkala.', keyword: 'perawatan baterai alat berat', category: 'Sistem Elektrik', unit: 'semua alat berat' },
+  { slug: 'perawatan-alternator-alat-berat', title: 'Perawatan Alternator Alat Berat dan Sistem Charging', desc: 'Tips merawat alternator dan sistem pengisian alat berat agar kelistrikan stabil dan baterai selalu terisi penuh.', keyword: 'perawatan alternator alat berat', category: 'Sistem Elektrik', unit: 'semua alat berat' },
+  { slug: 'perawatan-starter-motor-alat-berat', title: 'Perawatan Starter Motor Alat Berat agar Awet', desc: 'Panduan perawatan starter motor meliputi brush, solenoid, pinion, dan ring gear agar start mesin selalu lancar.', keyword: 'perawatan starter motor alat berat', category: 'Sistem Elektrik', unit: 'semua alat berat' },
+  { slug: 'perawatan-sistem-pendinginan-mesin-diesel', title: 'Perawatan Sistem Pendinginan Mesin Diesel Alat Berat', desc: 'Jadwal perawatan sistem pendinginan meliputi radiator, coolant, water pump, thermostat, dan fan belt agar mesin tidak overheat.', keyword: 'perawatan pendinginan mesin diesel', category: 'Sistem Pendingin', unit: 'semua alat berat' },
+  { slug: 'perawatan-turbocharger-alat-berat', title: 'Perawatan Turbocharger Alat Berat Diesel Modern', desc: 'Cara merawat turbocharger mesin diesel alat berat meliputi oli, bearing, wastegate, dan intercooler agar tenaga optimal.', keyword: 'perawatan turbocharger alat berat', category: 'Sistem Intake', unit: 'semua alat berat' },
+  { slug: 'perawatan-injector-bahan-bakar-alat-berat', title: 'Perawatan Injector Bahan Bakar Alat Berat Diesel', desc: 'Panduan perawatan fuel injector mesin diesel meliputi pembersihan, kalibrasi, dan penggantian nozzle agar pembakaran efisien.', keyword: 'perawatan injector alat berat', category: 'Sistem BBM', unit: 'semua alat berat' },
+  { slug: 'perawatan-suspensi-dump-truck', title: 'Perawatan Suspensi Dump Truck agar Nyaman dan Aman', desc: 'Tips merawat suspensi dump truck meliputi leaf spring, shock absorber, bushing, dan pin agar ritase aman.', keyword: 'perawatan suspensi dump truck', category: 'Perawatan Truck', unit: 'dump truck' },
+  { slug: 'perawatan-bak-angkut-dump-truck', title: 'Perawatan Bak Angkut Dump Truck agar Tidak Korosi', desc: 'Cara merawat bak angkut dump truck meliputi lining, pengecatan, pengelasan, dan inspeksi retak agar tahan lama.', keyword: 'perawatan bak dump truck', category: 'Perawatan Truck', unit: 'dump truck' },
+  { slug: 'perawatan-sistem-pneumatik-alat-berat', title: 'Perawatan Sistem Pneumatik dan Udara Tekan Alat Berat', desc: 'Jadwal perawatan sistem pneumatik meliputi compressor, air dryer, valve, dan selang udara tekan pada alat berat.', keyword: 'perawatan sistem pneumatik alat berat', category: 'Sistem Pneumatik', unit: 'semua alat berat' },
+  { slug: 'penyimpanan-alat-berat-musim-hujan', title: 'Penyimpanan Alat Berat saat Musim Hujan yang Benar', desc: 'Panduan penyimpanan alat berat saat musim hujan meliputi pelindung, pengawetan mesin, dan perawatan anti-karat.', keyword: 'penyimpanan alat berat musim hujan', category: 'Penyimpanan', unit: 'semua alat berat' },
+  { slug: 'penyimpanan-alat-berat-standby', title: 'Penyimpanan Alat Berat Standby agar Siap Kerja', desc: 'Cara menyimpan alat berat yang tidak digunakan sementara meliputi pengawetan mesin, baterai, dan pener pelindung.', keyword: 'penyimpanan alat berat standby', category: 'Penyimpanan', unit: 'semua alat berat' },
+  { slug: 'persiapan-alat-berat-sebelum-kerja', title: 'Persiapan Alat Berat Sebelum Jam Kerja Dimulai', desc: 'Checklist persiapan alat berat sebelum beroperasi meliputi walkaround inspection, pengecekan level, dan test fungsi.', keyword: 'persiapan alat berat sebelum kerja', category: 'Inspeksi Harian', unit: 'semua alat berat' },
+  { slug: 'inspeksi-harian-alat-berat', title: 'Inspeksi Harian Alat Berat yang Wajib Dilakukan Operator', desc: 'Checklist inspeksi harian alat berat meliputi mesin, hidrolik, ban atau track, rem, lampu, dan safety device.', keyword: 'inspeksi harian alat berat', category: 'Inspeksi Harian', unit: 'semua alat berat' },
+  { slug: 'checklist-keselamatan-alat-berat', title: 'Checklist Keselamatan Alat Berat Sebelum Operasi', desc: 'Daftar periksa keselamatan alat berat meliputi seat belt, ROPS, FOPS, kaca, mirror, horn, dan fire extinguisher.', keyword: 'checklist keselamatan alat berat', category: 'Keselamatan', unit: 'semua alat berat' },
+  { slug: 'perawatan-alat-berat-di-laut', title: 'Perawatan Alat Berat di Lingkungan Laut dan Pesisir', desc: 'Tips merawat alat berat yang bekerja di area laut meliputi anti-korosi, pencucian, dan pelumasan ekstra untuk mencegah karat.', keyword: 'perawatan alat berat lingkungan laut', category: 'Perawatan Khusus', unit: 'semua alat berat' },
+  { slug: 'perawatan-alat-berat-di-tambang', title: 'Perawatan Alat Berat di Area Tambang yang Ekstrem', desc: 'Panduan perawatan alat berat di area tambang meliputi filter ekstra, grease khusus, dan inspeksi lebih sering untuk debu tinggi.', keyword: 'perawatan alat berat tambang', category: 'Perawatan Khusus', unit: 'semua alat berat' },
+  { slug: 'perawatan-alat-berat-perkebunan', title: 'Perawatan Alat Berat di Perkebunan dan Lahan Gambut', desc: 'Cara merawat alat berat yang bekerja di perkebunan sawit meliputi anti-korosi, track, dan perawatan ekstra untuk kondisi basah.', keyword: 'perawatan alat berat perkebunan', category: 'Perawatan Khusus', unit: 'semua alat berat' },
+  { slug: 'perawatan-alat-berat-proyek-jalan', title: 'Perawatan Alat Berat untuk Proyek Jalan Raya', desc: 'Jadwal perawatan alat berat proyek jalan meliputi excavator, grader, roller, dan asphalt finisher agar pekerjaan tidak tertunda.', keyword: 'perawatan alat berat proyek jalan', category: 'Perawatan Khusus', unit: 'semua alat berat' },
+  { slug: 'penggunaan-oli-transmisi-alat-berat', title: 'Panduan Pemilihan Oli Transmisi Alat Berat yang Tepat', desc: 'Cara memilih oli transmisi yang sesuai untuk excavator, loader, grader, dan dump truck sesuai spesifikasi pabrikan.', keyword: 'oli transmisi alat berat', category: 'Pelumasan', unit: 'semua alat berat' },
+  { slug: 'penggunaan-oli-gear-alat-berat', title: 'Pemilihan Oli Gear dan Differential Alat Berat', desc: 'Panduan memilih oli gear untuk axle, differential, dan final drive alat berat sesuai viskositas dan standar API.', keyword: 'oli gear alat berat', category: 'Pelumasan', unit: 'semua alat berat' },
+  { slug: 'perawatan-ecm-alat-berat-modern', title: 'Perawatan ECM dan Sensor Alat Berat Modern', desc: 'Tips merawat ECM, sensor, dan wiring harness alat berat generasi baru meliputi pengecekan koneksi dan kalibrasi.', keyword: 'perawatan ECM alat berat', category: 'Sistem Elektrik', unit: 'semua alat berat' },
+  { slug: 'perawatan-ac-kabin-alat-berat', title: 'Perawatan AC Kabin Operator Alat Berat', desc: 'Jadwal perawatan AC kabin meliputi compressor, condenser, evaporator, filter udara, dan refrigerant agar operator nyaman.', keyword: 'perawatan AC kabin alat berat', category: 'Kenyamanan Operator', unit: 'semua alat berat' },
+  { slug: 'perawatan-kabin-operator-alat-berat', title: 'Perawatan Kabin Operator Alat Berat untuk Ergonomi', desc: 'Cara merawat kabin operator meliputi seat, control, ROPS, glass, dan interior agar produktivitas dan keselamatan optimal.', keyword: 'perawatan kabin operator alat berat', category: 'Kenyamanan Operator', unit: 'semua alat berat' },
+  { slug: 'perawatan-sistem-eps-alat-berat', title: 'Perawatan Sistem EPS Alat Berat untuk Kemudi Ringan', desc: 'Tips perawatan Electronic Power Steering pada alat berat modern meliputi sensor, actuator, dan kalibrasi steer.', keyword: 'perawatan EPS alat berat', category: 'Sistem Kemudi', unit: 'semua alat berat' },
+  { slug: 'perawatan-pompa-hidrolik-alat-berat', title: 'Perawatan Pompa Hidrolik Alat Berat agar Tekanan Stabil', desc: 'Jadwal perawatan pompa hidrolik excavator, loader, dan crane meliputi seal, bearing, dan pressure test agar tekanan stabil.', keyword: 'perawatan pompa hidrolik alat berat', category: 'Sistem Hidrolik', unit: 'semua alat berat' },
+  { slug: 'perawatan-silinder-hidrolik-alat-berat', title: 'Perawatan Silinder Hidrolik Alat Berat agar Tidak Bocor', desc: 'Cara merawat silinder hidrolik meliputi seal, rod, piston, dan chrome plating agar tidak bocor dan bekerja presisi.', keyword: 'perawatan silinder hidrolik alat berat', category: 'Sistem Hidrolik', unit: 'semua alat berat' },
+  { slug: 'perawatan-valve-hidrolik-alat-berat', title: 'Perawatan Valve Hidrolik Alat Berat agar Responsif', desc: 'Panduan perawatan control valve hidrolik pada alat berat meliputi spool, solenoid, dan spring agar kontrol responsif.', keyword: 'perawatan valve hidrolik alat berat', category: 'Sistem Hidrolik', unit: 'semua alat berat' },
+  { slug: 'pengelasan-perbaikan-alat-berat', title: 'Pengelasan dan Perbaikan Struktural Alat Berat', desc: 'Panduan pengelasan perbaikan pada chasis, boom, bucket, dan komponen struktural alat berat sesuai standar keselamatan.', keyword: 'pengelasan perbaikan alat berat', category: 'Perbaikan Struktural', unit: 'semua alat berat' },
+  { slug: 'perawatan-pin-bushing-alat-berat', title: 'Perawatan Pin dan Bushing Alat Berat Mencegah Aus', desc: 'Cara merawat pin dan bushing pada boom, arm, bucket, dan blade agar pergerakan presisi dan tidak getar berlebihan.', keyword: 'perawatan pin bushing alat berat', category: 'Perawatan Komponen', unit: 'semua alat berat' },
+  { slug: 'perawatan-cutting-edge-alat-berat', title: 'Perawatan Cutting Edge dan Gigi Bucket Alat Berat', desc: 'Tips perawatan dan penggantian cutting edge serta gigi bucket pada excavator, loader, dan bulldozer agar gali tetap tajam.', keyword: 'perawatan cutting edge alat berat', category: 'Perawatan Attachment', unit: 'semua alat berat' },
+  { slug: 'perawatan-sistem-pencucian-alat-berat', title: 'Perawatan Sistem Pencucian dan Pembersihan Alat Berat', desc: 'Cara mencuci alat berat dengan benar meliputi tekanan air, sabun, area elektrik, dan pengeringan agar tidak karat.', keyword: 'pencucian alat berat', category: 'Perawatan Eksterior', unit: 'semua alat berat' },
+  { slug: 'perawatan-track-chain-excavator', title: 'Perawatan Track Chain Excavator agar Awet dan Presisi', desc: 'Jadwal perawatan track chain meliputi tension, lubrication, idler, sprocket, dan roller agar track awet dan pergerakan presisi.', keyword: 'perawatan track chain excavator', category: 'Perawatan Undercarriage', unit: 'excavator' },
+  { slug: 'perawatan-sistem-pengunci-differential', title: 'Perawatan Sistem Pengunci Differential Alat Berat Beroda', desc: 'Panduan perawatan differential lock pada wheel loader, grader, dan dump truck agar traksi optimal di medan licin.', keyword: 'perawatan differential lock alat berat', category: 'Sistem Transmisi', unit: 'alat berat beroda' },
+  { slug: 'perawatan-articulation-wheel-loader', title: 'Perawatan Articulation Joint Wheel Loader', desc: 'Cara merawat articulation joint pada wheel loader meliputi pin, bushing, grease, dan seal agar putar presisi.', keyword: 'perawatan articulation wheel loader', category: 'Perawatan Loader', unit: 'wheel loader' },
+  { slug: 'manajemen-suku-cadang-alat-berat', title: 'Manajemen Suku Cadang Alat Berat yang Efisien', desc: 'Cara mengelola suku cadang alat berat meliputi forecasting, inventory, storage, dan kemitraan supplier untuk mengurangi downtime.', keyword: 'manajemen suku cadang alat berat', category: 'Manajemen', unit: 'semua alat berat' },
+  { slug: 'pelatihan-operator-perawatan-alat-berat', title: 'Pelatihan Operator tentang Perawatan Dasar Alat Berat', desc: 'Materi pelatihan operator alat berat tentang perawatan dasar meliputi inspeksi harian, grease, pengecekan oli, dan pelaporan.', keyword: 'pelatihan operator perawatan alat berat', category: 'Manajemen', unit: 'semua alat berat' },
+  { slug: 'dokumentasi-perawatan-alat-berat', title: 'Dokumentasi Perawatan Alat Berat yang Benar dan Terstruktur', desc: 'Cara membuat sistem dokumentasi perawatan alat berat meliputi work order, history card, jam operasi, dan laporan kondisi.', keyword: 'dokumentasi perawatan alat berat', category: 'Manajemen', unit: 'semua alat berat' },
+  { slug: 'perawatan-alat-berat-seri-komatsu', title: 'Perawatan Alat Berat Seri Komatsu sesuai Buku Panduan', desc: 'Panduan perawatan alat berat Komatsu meliputi interval service, oli yang direkomendasikan, dan komponen kritis per model.', keyword: 'perawatan alat berat Komatsu', category: 'Per Merk', unit: 'Komatsu' },
+  { slug: 'perawatan-alat-berat-seri-caterpillar', title: 'Perawatan Alat Berat Seri Caterpillar sesuai Manual', desc: 'Jadwal perawatan alat berat Caterpillar meliputi fluid recommendation, service interval, dan analysis per model.', keyword: 'perawatan alat berat Caterpillar', category: 'Per Merk', unit: 'Caterpillar' },
+  { slug: 'perawatan-alat-berat-seri-hitachi', title: 'Perawatan Alat Berat Seri Hitachi yang Tepat', desc: 'Tips perawatan alat berat Hitachi meliputi ganti oli berkala, filter, undercarriage, dan hidrolik sesuai buku panduan.', keyword: 'perawatan alat berat Hitachi', category: 'Per Merk', unit: 'Hitachi' },
+  { slug: 'perawatan-alat-berat-seri-volvo', title: 'Perawatan Alat Berat Seri Volvo sesuai Standar', desc: 'Panduan perawatan alat berat Volvo meliputi care track, lube advisor, dan scheduled maintenance per model dan jam operasi.', keyword: 'perawatan alat berat Volvo', category: 'Per Merk', unit: 'Volvo' },
+  { slug: 'perawatan-alat-berat-seri-hyundai', title: 'Perawatan Alat Berat Seri Hyundai agar Awet', desc: 'Jadwal perawatan alat berat Hyundai meliputi mesin, hidrolik, transmisi, dan undercarriage sesuai rekomendasi pabrikan.', keyword: 'perawatan alat berat Hyundai', category: 'Per Merk', unit: 'Hyundai' },
+  { slug: 'perawatan-alat-berat-seri-kobelco', title: 'Perawatan Alat Berat Seri Kobelco untuk Produktivitas', desc: 'Tips perawatan alat berat Kobelco meliputi KOMEXS, interval service, dan komponen kritis per model excavator dan crane.', keyword: 'perawatan alat berat Kobelco', category: 'Per Merk', unit: 'Kobelco' },
+  { slug: 'perawatan-alat-berat-seri-xcmg', title: 'Perawatan Alat Berat Seri XCMG yang Benar', desc: 'Panduan perawatan alat berat XCMG meliputi mesin, hidrolik, electric system, dan undercarriage per model dan jam operasi.', keyword: 'perawatan alat berat XCMG', category: 'Per Merk', unit: 'XCMG' },
+  { slug: 'perawatan-alat-berat-seri-sany', title: 'Perawatan Alat Berat Seri Sany sesuai Panduan', desc: 'Jadwal perawatan alat berat Sany meliputi service interval, oli, filter, dan inspection point untuk menjaga performa unit.', keyword: 'perawatan alat berat Sany', category: 'Per Merk', unit: 'Sany' },
+];
+
+const createMaintenanceArticle = (topic: MaintenanceTopic): Article => {
+  const u = topic.unit;
+  const uc = u.charAt(0).toUpperCase() + u.slice(1);
+  return {
+    slug: topic.slug,
+    title: topic.title,
+    description: topic.desc,
+    keyword: topic.keyword,
+    category: topic.category,
+    sections: [
+      {
+        h2: `Pentingnya Perawatan ${uc} secara Berkala`,
+        paragraphs: [
+          `Perawatan ${u} merupakan aspek kritis dalam menjaga produktivitas dan keselamatan operasi alat berat di lapangan. Tanpa perawatan yang terjadwal dan sistematis, ${u} rentan mengalami breakdown yang tidak hanya menunda pekerjaan tetapi juga meningkatkan biaya perbaikan secara signifikan. Di Pekanbaru dan wilayah Riau, kondisi medan yang bervariasi dari tanah keras perkotaan hingga lahan gambut perkebunan menambah tantangan tersendiri dalam pemeliharaan unit. Iklim tropis yang lembap juga mempercepat proses korosi pada komponen baja dan sambungan elektrik jika tidak ditangani dengan perawatan yang tepat.`,
+          `Artikel ini membahas secara komprehensif panduan perawatan ${u} yang mencakup inspeksi harian, jadwal service berkala, komponen utama yang perlu diperhatikan, serta tips praktis yang dapat diterapkan langsung di lapangan. Dengan menerapkan langkah-langkah perawatan yang tepat, umur ekonomis ${u} dapat diperpanjang dan biaya operasional dapat dikendalikan lebih baik. Perawatan yang konsisten juga mengurangi risiko kecelakaan kerja akibat komponen yang aus atau rusak secara tiba-tiba selama operasi berlangsung.`
+        ],
+        h3: `Mengapa Perawatan ${uc} Tidak Boleh Ditunda`,
+        h4: 'Dampak Negatif Kelalaian Perawatan',
+        h5: `Checklist Perawatan Harian ${uc}`,
+        table: {
+          headers: ['Aspek Perawatan', 'Dampak Jika Diabaikan', 'Frekuensi Ideal'],
+          rows: [
+            ['Inspeksi visual harian', 'Kerusakan tidak terdeteksi dini', 'Setiap hari sebelum operasi'],
+            ['Pengecekan level oli', 'Mesin kekurangan pelumas', 'Setiap hari sebelum start'],
+            ['Greasing titik pelumasan', 'Aus prematur pada pin dan bushing', 'Setiap 50-250 jam operasi'],
+            ['Penggantian filter berkala', 'Kontaminan masuk ke sistem', 'Sesuai interval pabrikan']
+          ]
+        }
+      },
+      {
+        h2: `Komponen Utama ${uc} yang Wajib Dirawat`,
+        paragraphs: [
+          `Komponen utama ${u} yang memerlukan perhatian khusus dalam perawatan meliputi mesin utama, sistem hidrolik, transmisi, undercarriage atau ban, serta sistem elektrik. Setiap komponen memiliki interval perawatan yang berbeda dan membutuhkan jenis pelumas serta suku cadang yang spesifik sesuai rekomendasi pabrikan. Pemahaman menyeluruh tentang setiap komponen membantu tim perawatan memprioritaskan tindakan yang paling kritis dan mengalokasikan sumber daya secara efisien.`,
+          `Mesin diesel sebagai jantung ${u} membutuhkan perawatan oli, filter udara, filter bahan bakar, dan sistem pendingin yang konsisten. Sistem hidrolik yang menggerakkan boom, bucket, blade, atau attachment lainnya memerlukan monitoring tekanan dan kondisi selang secara berkala. Kelalaian dalam merawat salah satu komponen ini dapat menyebabkan efek domino pada komponen lainnya dan berujung pada downtime yang mahal, terutama pada proyek yang memiliki timeline ketat di mana setiap jam kerja sangat berharga.`
+        ],
+        h3: `Sistem Mesin dan Hidrolik ${uc}`,
+        h4: 'Undercarriage dan Sistem Elektrik',
+        h5: 'Catatan Temuan dan Tindak Lanjut',
+        table: {
+          headers: ['Komponen', 'Titik Periksa', 'Interval'],
+          rows: [
+            ['Mesin diesel', 'Oli, filter, coolant, belt', 'Setiap 250 jam'],
+            ['Sistem hidrolik', 'Tekanan, selang, seal, oli', 'Setiap 500 jam'],
+            ['Transmisi', 'Oli, filter, clutch, coupling', 'Setiap 500 jam'],
+            ['Undercarriage atau ban', 'Tension, keausan, tekanan', 'Setiap 250 jam'],
+            ['Sistem elektrik', 'Baterai, kabel, sensor, lampu', 'Setiap 500 jam']
+          ]
+        }
+      },
+      {
+        h2: `Jadwal Perawatan ${uc} Berdasarkan Jam Operasi`,
+        paragraphs: [
+          `Jadwal perawatan ${u} umumnya dibagi menjadi beberapa interval berdasarkan jam operasi. Service harian mencakup pengecekan level oli mesin, coolant, dan oli hidrolik, inspeksi visual kebocoran, serta test fungsi rem dan steering. Service berkala pada interval 250, 500, 1000, dan 2000 jam operasi memiliki cakupan yang semakin menyeluruh seiring bertambahnya jam operasi unit. Setiap interval memiliki daftar komponen yang wajib diperiksa dan diganti sesuai buku panduan pabrikan masing-masing.`,
+          `Pencatatan jam operasi secara akurat menjadi kunci keberhasilan perawatan berkala ${u}. Hour meter yang berfungsi dengan baik dan pencatatan manual oleh operator membantu tim perawatan mengetahui kapan service berikutnya harus dilakukan. Keterlambatan dalam menjadwalkan service dapat mengakibatkan keausan prematur dan kerusakan yang lebih mahal, terutama pada komponen kritis seperti turbocharger dan pompa injeksi yang biaya penggantiannya sangat tinggi dibandingkan biaya perawatan rutin yang terjadwal.`
+        ],
+        h3: `Interval Service ${uc} yang Direkomendasikan`,
+        h4: 'Pencatatan Jam Operasi yang Akurat',
+        h5: 'Penjadwalan Service Selanjutnya',
+        table: {
+          headers: ['Interval Service', 'Cakupan Perawatan', 'Prioritas'],
+          rows: [
+            ['Harian', 'Level oli, coolant, inspeksi visual, test fungsi', 'Wajib setiap hari'],
+            ['250 jam', 'Ganti oli mesin, filter oli, grease seluruh titik', 'Wajib'],
+            ['500 jam', 'Ganti filter udara, filter bahan bakar, oli hidrolik', 'Wajib'],
+            ['1000 jam', 'Overhaul ringan, penggantian belt, seal minor', 'Penting'],
+            ['2000 jam', 'Overhaul berat, penggantian komponen utama aus', 'Kritis']
+          ]
+        }
+      },
+      {
+        h2: `Tips Praktis Perawatan ${uc} di Lapangan`,
+        paragraphs: [
+          `Beberapa tips praktis perawatan ${u} yang sering terlewatkan meliputi pemanasan mesin sebelum bekerja penuh, pendinginan bertahap sebelum mematikan mesin, pencucian rutin untuk mencegah korosi, serta greasing pada seluruh titik pelumasan. Di area Pekanbaru yang lembap, perawatan anti-karat menjadi sangat penting terutama pada komponen elektrik dan chasis yang terkena paparan hujan dan lumpur secara terus-menerus selama musim hujan yang panjang diwilayah Riau.`,
+          `Operator ${u} juga berperan besar dalam perawatan preventif melalui inspeksi harian sebelum operasi. Pengecekan tekanan ban atau track tension, level cairan, kondisi selang, fungsi lampu dan horn, serta kelainan suara atau getaran harus dilaporkan segera. Deteksi dini masalah kecil mencegah kerusakan besar di kemudian hari dan menjaga produktivitas kerja tetap optimal sepanjang durasi proyek berlangsung tanpa gangguan downtime yang tidak terencana.`
+        ],
+        h3: 'Kebiasaan Operator yang Mendukung Perawatan',
+        h4: 'Perawatan Anti-Karat di Iklim Tropis',
+        h5: 'Laporan Harian Operator',
+        table: {
+          headers: ['Tips Praktis', 'Penjelasan', 'Manfaat'],
+          rows: [
+            ['Pemanasan mesin 5-10 menit', 'Jangan langsung beban penuh saat start', 'Umur mesin lebih panjang'],
+            ['Pendinginan sebelum mati', 'Biarkan idle 3-5 menit sebelum shut down', 'Turbocharger tetap sehat'],
+            ['Pencucian rutin', 'Gunakan air bertekanan rendah pada area elektrik', 'Mencegah korosi dan karat'],
+            ['Catat jam operasi', 'Gunakan hour meter dan logbook harian', 'Service tepat waktu']
+          ]
+        }
+      },
+      {
+        h2: `Keselamatan Kerja saat Perawatan ${uc}`,
+        paragraphs: [
+          `Keselamatan kerja saat melakukan perawatan ${u} tidak boleh diabaikan. Prosedur lockout dan tagout harus diterapkan sebelum bekerja pada komponen bertekanan tinggi atau sistem elektrik. Alat pelindung diri seperti helm, sarung tangan, kacamata, dan sepatu safety wajib digunakan oleh mekanik dan teknisi yang melakukan perawatan. Area kerja harus ditandai dengan jelas dan akses dibatasi hanya untuk personel yang berwenang agar tidak ada orang yang tidak terkiku memasuki zona perawatan yang berisiko.`,
+          `Pengangkatan komponen berat ${u} harus menggunakan alat bantu yang memadai seperti overhead crane, chain block, atau hydraulic jack yang sesuai kapasitas. Penggunaan jack stand atau blok pendukung yang kuat mencegah unit jatuh saat ditinggikan. Bahan kimia seperti oli, coolant, dan pelumas harus disimpan dan dibuang sesuai regulasi lingkungan yang berlaku untuk mencegah kontaminasi tanah dan air di sekitar area perawatan maupun lokasi proyek tempat unit tersebut biasa beroperasi.`
+        ],
+        h3: 'Prosedur Lockout dan APD',
+        h4: 'Area Kerja dan Pengangkatan Komponen',
+        h5: 'Pembuangan Limbah dan Bahan Kimia',
+        table: {
+          headers: ['Prosedur Keselamatan', 'Keterangan', 'Standar'],
+          rows: [
+            ['Lockout/Tagout', 'Kunci dan beri label sebelum perbaikan', 'OSHA 1910.147'],
+            ['APD lengkap', 'Helm, sarung tangan, kacamata, sepatu safety', 'SNI dan K3'],
+            ['Jack stand/blocking', 'Dukung unit sebelum bekerja di bawahnya', 'Manual pabrikan'],
+            ['Pembuangan limbah', 'Oli dan coolant bekas wajib dikelola', 'Regulasi Lingkungan']
+          ]
+        }
+      },
+      {
+        h2: `Analisis Biaya Perawatan ${uc} versus Perbaikan Darurat`,
+        paragraphs: [
+          `Perawatan ${u} yang terjadwal memang memerlukan investasi waktu dan biaya, namun biaya ini jauh lebih rendah dibandingkan biaya perbaikan akibat breakdown. Perbandingan umum menunjukkan bahwa biaya perawatan preventif hanya sepertiga hingga seperlima dari biaya perbaikan darurat. Selain itu, unit yang terawat memiliki produktivitas lebih tinggi dan konsumsi bahan bakar lebih efisien karena mesin dan komponen bekerja dalam kondisi optimal tanpa hambatan yang disebabkan oleh keausan atau penurunan performa.`,
+          `Untuk penyedia jasa sewa ${u} di Pekanbaru, perawatan yang baik menjadi nilai jual karena klien lebih memilih unit yang siap kerja dan terawat. Dokumentasi perawatan yang rapi juga meningkatkan nilai jual kembali saat unit dipensiunkan atau diganti dengan model yang lebih baru. Pendekatan perawatan berbasis data membantu menentukan titik optimal antara memperbaiki dan mengganti unit berdasarkan analisis biaya total kepemilikan terhadap umur ekonomis masing-masing komponen yang telah tercatat secara sistematis.`
+        ],
+        h3: 'Perbandingan Biaya Preventif dan Korektif',
+        h4: 'Pengaruh terhadap Nilai Jual Kembali',
+        h5: 'Dokumentasi Biaya Perawatan',
+        table: {
+          headers: ['Jenis Perawatan', 'Estimasi Biaya', 'Rasio terhadap Perbaikan Darurat'],
+          rows: [
+            ['Service harian', 'Waktu operator 15-30 menit', '1:20 dari biaya breakdown'],
+            ['Service 250 jam', 'Oli dan filter dasar', '1:10 dari biaya kerusakan mesin'],
+            ['Service 500-1000 jam', 'Komponen berkala', '1:5 dari biaya overhaul darurat'],
+            ['Service 2000 jam', 'Overhaul terjadwal', '1:3 dari biaya penggantian unit']
+          ]
+        }
+      },
+      {
+        h2: `Kesimpulan Strategi Perawatan ${uc}`,
+        paragraphs: [
+          `Perawatan ${u} yang konsisten dan terstruktur merupakan investasi jangka panjang yang menjaga produktivitas, keselamatan, dan efisiensi biaya operasional. Dengan mengikuti jadwal service pabrikan, melakukan inspeksi harian, dan menindaklanjuti setiap temuan secara cepat, ${u} dapat beroperasi optimal sepanjang umur ekonomisnya. Perawatan yang telaten juga mengurangi risiko kecelakaan kerja yang diakibatkan oleh komponen aus atau rusak yang apabila terjadi dapat menimbulkan kerugian materi dan non-materi yang sangat besar bagi seluruh pemangku kepentingan.`,
+          `Untuk project manager dan fleet manager di Pekanbaru dan sekitarnya, menerapkan sistem perawatan ${u} yang terdokumentasi dengan baik akan memberikan data berharga untuk pengambilan keputusan apakah unit perlu diservis, di-overhaul, atau diganti. Dengan pendekatan yang tepat, downtime dapat diminimalkan dan biaya total kepemilikan dapat dikendalikan secara efektif sehingga proyek berjalan sesuai jadwal dan anggaran yang telah ditetapkan sejak awal perencanaan tanpa gangguan signifikan dari sisi ketersediaan unit.`
+        ],
+        h3: `Langkah Perawatan ${uc} ke Depan`,
+        h4: 'Monitoring dan Evaluasi Berkala',
+        h5: 'Komitmen Perawatan Berkelanjutan',
+        table: {
+          headers: ['Langkah Perawatan', 'Aksi', 'Tujuan'],
+          rows: [
+            ['1. Inspeksi harian', 'Walkaround dan pengecekan level', 'Deteksi dini masalah'],
+            ['2. Service berkala', 'Ikuti jadwal interval pabrikan', 'Cegah keausan prematur'],
+            ['3. Dokumentasi', 'Catat setiap perawatan dan temuan', 'Data pengambilan keputusan'],
+            ['4. Evaluasi berkala', 'Review biaya dan produktivitas', 'Optimasi strategi perawatan']
+          ]
+        }
+      }
+    ]
+  };
+};
+
 const allArticles = [
   longArticle,
   ...baseArticles,
   ...extraTopics.map(createArticle),
-  ...projectToolsTopics.map(createProjectToolArticle)
+  ...projectToolsTopics.map(createProjectToolArticle),
+  ...maintenanceTopics.map(createMaintenanceArticle)
 ];
 
 export const articles: Article[] = allArticles.map((article, index) => ({

@@ -79,6 +79,24 @@ const formatDate = (date?: string) =>
             <section class="content-block">
               <h2 id={getHeadingId(section.h2)}>{section.h2}</h2>
               {section.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+              {section.table && (
+                <div class="table-wrapper">
+                  <table>
+                    <thead>
+                      <tr>
+                        {section.table.headers.map((header) => <th>{header}</th>)}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {section.table.rows.map((row) => (
+                        <tr>
+                          {row.map((cell) => <td>{cell}</td>)}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
               <h3 id={`${getHeadingId(section.h2)}-h3`}>{section.h3}</h3>
               <p>Gunakan data lapangan seperti luas area, volume material, titik buang, akses masuk, dan kondisi tanah untuk menentukan metode kerja yang paling efisien.</p>
               <h4 id={`${getHeadingId(section.h2)}-h4`}>{section.h4}</h4>
@@ -251,6 +269,47 @@ const formatDate = (date?: string) =>
 
   p {
     color: var(--muted);
+  }
+
+  .table-wrapper {
+    overflow-x: auto;
+    margin: 20px 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.92rem;
+  }
+
+  th {
+    background: var(--green-2);
+    color: #ffffff;
+    font-weight: 750;
+    text-align: left;
+    padding: 10px 14px;
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--line);
+    color: var(--muted);
+  }
+
+  tr:nth-child(even) td {
+    background: #f8faf7;
+  }
+
+  tr:hover td {
+    background: #eef5f0;
+  }
+
+  @media (max-width: 640px) {
+    th, td {
+      padding: 8px 10px;
+      font-size: 0.84rem;
+    }
   }
 
   .article-sidebar {
