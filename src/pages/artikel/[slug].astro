@@ -1,0 +1,322 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { articles, heavyEquipment } from '../../data/articles';
+
+export function getStaticPaths() {
+  return articles.map((article) => ({
+    params: { slug: article.slug },
+    props: { article }
+  }));
+}
+
+const { article } = Astro.props;
+const related = articles.filter((item) => item.slug !== article.slug).slice(0, 4);
+const getHeadingId = (text: string) =>
+  text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+
+const articleText = article.sections
+  .flatMap((section) => [
+    section.h2,
+    ...section.paragraphs,
+    section.h3,
+    section.h4,
+    section.h5
+  ])
+  .join(' ');
+const articleWordCount = articleText.trim().split(/\s+/).filter(Boolean).length;
+const showToc = articleWordCount >= 800;
+const toc = article.sections.map((section, index) => ({
+  number: String(index + 1).padStart(2, '0'),
+  id: getHeadingId(section.h2),
+  text: section.h2
+}));
+const formatDate = (date?: string) =>
+  date
+    ? new Intl.DateTimeFormat('id-ID', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+        timeZone: 'UTC'
+      }).format(new Date(`${date}T00:00:00.000Z`))
+    : '';
+---
+<BaseLayout title={article.title} description={article.description}>
+  <main>
+    <article class="article-hero">
+      <div class="container article-layout">
+        <div class="article-main">
+          <p class="eyebrow">{article.category}</p>
+          <h1>{article.title}</h1>
+          {article.publishedDate && (
+            <p class="article-date">
+              Dipublikasikan <time datetime={article.publishedDate}>{formatDate(article.publishedDate)}</time>
+            </p>
+          )}
+          <p class="lead">{article.description}</p>
+          {showToc && (
+            <nav class="toc" aria-label="Daftar isi artikel">
+              <div class="toc-head">
+                <h2>Daftar Isi</h2>
+                <span>{articleWordCount}+ kata</span>
+              </div>
+              <ol>
+                {toc.map((item) => (
+                  <li>
+                    <a href={`#${item.id}`}>
+                      <span>{item.number}</span>
+                      {item.text}
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            </nav>
+          )}
+
+          {article.sections.map((section) => (
+            <section class="content-block">
+              <h2 id={getHeadingId(section.h2)}>{section.h2}</h2>
+              {section.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+              <h3 id={`${getHeadingId(section.h2)}-h3`}>{section.h3}</h3>
+              <p>Gunakan data lapangan seperti luas area, volume material, titik buang, akses masuk, dan kondisi tanah untuk menentukan metode kerja yang paling efisien.</p>
+              <h4 id={`${getHeadingId(section.h2)}-h4`}>{section.h4}</h4>
+              <p>Dokumentasikan kebutuhan unit, operator, bahan bakar, ritase, serta jadwal mobilisasi sebelum pekerjaan dimulai agar biaya sewa lebih mudah dikontrol.</p>
+              <h5 id={`${getHeadingId(section.h2)}-h5`}>{section.h5}</h5>
+              <p>Pastikan seluruh pihak memahami lingkup pekerjaan, jam operasional, standar keselamatan, dan target progress harian.</p>
+            </section>
+          ))}
+        </div>
+
+        <aside class="article-sidebar">
+          <div class="card cta-box">
+            <h2>Butuh {article.keyword}?</h2>
+            <p>Kirim lokasi, jenis pekerjaan, dan tanggal mulai untuk rekomendasi unit.</p>
+            <a class="button" href={`https://wa.me/682385023881?text=Halo%2C%20saya%20butuh%20${encodeURIComponent(article.keyword)}`}>Konsultasi</a>
+          </div>
+          <div class="card">
+            <h2>Unit Tersedia</h2>
+            <div class="mini-tags">
+              {heavyEquipment.slice(0, 18).map((item) => <span>{item}</span>)}
+            </div>
+          </div>
+          <div class="card">
+            <h2>Artikel Terkait</h2>
+            <ul>
+              {related.map((item) => <li><a href={`/artikel/${item.slug}`}>{item.title}</a></li>)}
+            </ul>
+          </div>
+        </aside>
+      </div>
+    </article>
+  </main>
+</BaseLayout>
+
+<style>
+  .article-hero {
+    padding: 62px 0 80px;
+    background: #ffffff;
+  }
+
+  .article-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 42px;
+    align-items: start;
+  }
+
+  .article-main {
+    max-width: 780px;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: clamp(2.3rem, 5vw, 4.4rem);
+    line-height: 1;
+    letter-spacing: 0;
+  }
+
+  .lead {
+    color: var(--muted);
+    font-size: 1.16rem;
+  }
+
+  .article-date {
+    margin: 16px 0 0;
+    color: var(--muted);
+    font-size: 0.95rem;
+    font-weight: 750;
+  }
+
+  .article-date time {
+    color: var(--green);
+  }
+
+  .toc {
+    margin-top: 30px;
+    padding: 22px;
+    border: 1px solid var(--line);
+    border-left: 5px solid var(--green);
+    border-radius: 8px;
+    background: #f8faf7;
+  }
+
+  .toc-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .toc h2 {
+    margin: 0;
+    font-size: 1rem;
+  }
+
+  .toc-head span {
+    padding: 5px 9px;
+    border-radius: 8px;
+    background: #e7efe9;
+    color: var(--green);
+    font-size: 0.82rem;
+    font-weight: 850;
+    white-space: nowrap;
+  }
+
+  .toc ol {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px 18px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .toc a {
+    display: grid;
+    grid-template-columns: 34px 1fr;
+    gap: 10px;
+    align-items: start;
+    color: var(--ink);
+    font-weight: 800;
+    line-height: 1.35;
+  }
+
+  .toc a span {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: #ffffff;
+    color: var(--green-2);
+    font-size: 0.78rem;
+    font-weight: 900;
+  }
+
+  .toc a:hover {
+    color: var(--green-2);
+  }
+
+  .content-block {
+    margin-top: 42px;
+    padding-top: 34px;
+    border-top: 1px solid var(--line);
+  }
+
+  h2 {
+    margin: 0 0 12px;
+    font-size: 2rem;
+    line-height: 1.15;
+  }
+
+  h3 {
+    margin: 28px 0 8px;
+    font-size: 1.45rem;
+  }
+
+  h4 {
+    margin: 22px 0 8px;
+    font-size: 1.15rem;
+  }
+
+  h5 {
+    margin: 18px 0 8px;
+    color: var(--green-2);
+    font-size: 1rem;
+    text-transform: uppercase;
+  }
+
+  p {
+    color: var(--muted);
+  }
+
+  .article-sidebar {
+    position: sticky;
+    top: 98px;
+    display: grid;
+    gap: 16px;
+  }
+
+  .article-sidebar .card {
+    padding: 20px;
+  }
+
+  .article-sidebar h2 {
+    margin: 0 0 12px;
+    font-size: 1.1rem;
+  }
+
+  .cta-box {
+    background: #eef5f0;
+  }
+
+  .mini-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .mini-tags span {
+    padding: 7px 9px;
+    border-radius: 8px;
+    background: #f1f4f1;
+    color: var(--muted);
+    font-size: 0.86rem;
+    font-weight: 750;
+    text-transform: capitalize;
+  }
+
+  ul {
+    display: grid;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li a {
+    color: var(--muted);
+    font-weight: 750;
+  }
+
+  li a:hover {
+    color: var(--green-2);
+  }
+
+  @media (max-width: 960px) {
+    .article-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .article-sidebar {
+      position: static;
+    }
+
+    .toc ol {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,122 @@
+---
+import { articles, heavyEquipment } from '../data/articles';
+---
+<footer id="kontak" class="site-footer">
+  <div class="container footer-grid">
+    <section>
+      <p class="footer-brand">Sewa Alat Berat Pekanbaru</p>
+      <p>Konsultasi kebutuhan excavator, bulldozer, loader, crane, dump truck, compactor, dan alat pendukung proyek di Pekanbaru serta wilayah Riau.</p>
+      <a class="footer-cta" href="https://wa.me/682385023881?text=Halo%2C%20saya%20butuh%20sewa%20alat%20berat%20di%20Pekanbaru">Hubungi WhatsApp</a>
+    </section>
+    <section>
+      <h2>Layanan</h2>
+      <ul>
+        <li>Sewa alat berat harian, mingguan, bulanan</li>
+        <li>Operator berpengalaman</li>
+        <li>Mobilisasi lowbed trailer</li>
+        <li>Survei kebutuhan alat proyek</li>
+      </ul>
+    </section>
+    <section>
+      <h2>Artikel Populer</h2>
+      <ul>
+        {articles.slice(0, 5).map((article) => <li><a href={`/artikel/${article.slug}`}>{article.keyword}</a></li>)}
+      </ul>
+    </section>
+  </div>
+  <div class="container equipment-line">
+    <strong>Unit:</strong> {heavyEquipment.join(', ')}
+  </div>
+  <div class="container copyright">
+    <span>© 2026 Sewa Alat Berat Pekanbaru.</span>
+    <span>Website statis SEO friendly dengan Astro.</span>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: #10231f;
+    color: #eaf2ed;
+    padding: 58px 0 26px;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1.25fr 1fr 1fr;
+    gap: 34px;
+  }
+
+  .footer-brand {
+    margin: 0 0 12px;
+    color: var(--lime);
+    font-size: 1.35rem;
+    font-weight: 900;
+  }
+
+  .site-footer p {
+    max-width: 520px;
+    margin-top: 0;
+    color: #bfd0c9;
+  }
+
+  .site-footer h2 {
+    margin: 0 0 14px;
+    font-size: 1rem;
+  }
+
+  ul {
+    display: grid;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: #bfd0c9;
+  }
+
+  a:hover {
+    color: var(--lime);
+  }
+
+  .footer-cta {
+    display: inline-flex;
+    min-height: 42px;
+    align-items: center;
+    justify-content: center;
+    padding: 0 15px;
+    border-radius: 8px;
+    background: var(--lime);
+    color: #10231f;
+    font-weight: 900;
+  }
+
+  .equipment-line {
+    margin-top: 34px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    color: #bfd0c9;
+    font-size: 0.92rem;
+  }
+
+  .equipment-line strong {
+    color: #ffffff;
+  }
+
+  .copyright {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 24px;
+    color: #91a39c;
+    font-size: 0.88rem;
+  }
+
+  @media (max-width: 800px) {
+    .footer-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .copyright {
+      flex-direction: column;
+    }
+  }
+</style>
