@@ -170,11 +170,11 @@ const formatDate = (date?: string) =>
     display: none;
   }
 
-  article {
+  :global(.article-index article) {
     padding: 22px;
   }
 
-  .meta {
+  :global(.article-index .meta) {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -182,31 +182,31 @@ const formatDate = (date?: string) =>
     margin-bottom: 10px;
   }
 
-  article span {
+  :global(.article-index article span) {
     color: var(--green-2);
     font-size: 0.8rem;
     font-weight: 900;
     text-transform: uppercase;
   }
 
-  time {
+  :global(.article-index time) {
     color: var(--muted);
     font-size: 0.82rem;
     font-weight: 750;
     white-space: nowrap;
   }
 
-  h2 {
+  :global(.article-index h2) {
     margin: 0 0 10px;
     font-size: 1.2rem;
     line-height: 1.28;
   }
 
-  h2 a:hover {
+  :global(.article-index h2 a:hover) {
     color: var(--green-2);
   }
 
-  article p {
+  :global(.article-index article p) {
     margin: 0;
     color: var(--muted);
   }
@@ -259,7 +259,7 @@ const formatDate = (date?: string) =>
   }
 
   @media (max-width: 900px) {
-    .grid {
+    :global(.article-index .grid) {
       grid-template-columns: 1fr;
     }
 

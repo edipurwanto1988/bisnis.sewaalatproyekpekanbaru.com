@@ -42,6 +42,19 @@ const formatDate = (date?: string) =>
         timeZone: 'UTC'
       }).format(new Date(`${date}T00:00:00.000Z`))
     : '';
+const internalLinkUrl = 'https://bisnis.sewaalatproyekpekanbaru.com';
+const escapeHtml = (value: string) =>
+  value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+const linkInternalKeyword = (value: string) =>
+  escapeHtml(value).replace(
+    /\b(sewa alat berat)\b/gi,
+    `<a class="internal-link" href="${internalLinkUrl}">$1</a>`
+  );
 ---
 <BaseLayout title={article.title} description={article.description}>
   <main>
@@ -55,7 +68,7 @@ const formatDate = (date?: string) =>
               Dipublikasikan <time datetime={article.publishedDate}>{formatDate(article.publishedDate)}</time>
             </p>
           )}
-          <p class="lead">{article.description}</p>
+          <p class="lead" set:html={linkInternalKeyword(article.description)} />
           {showToc && (
             <nav class="toc" aria-label="Daftar isi artikel">
               <div class="toc-head">
@@ -78,7 +91,7 @@ const formatDate = (date?: string) =>
           {article.sections.map((section) => (
             <section class="content-block">
               <h2 id={getHeadingId(section.h2)}>{section.h2}</h2>
-              {section.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+              {section.paragraphs.map((paragraph) => <p set:html={linkInternalKeyword(paragraph)} />)}
               {section.table && (
                 <div class="table-wrapper">
                   <table>
@@ -98,11 +111,11 @@ const formatDate = (date?: string) =>
                 </div>
               )}
               <h3 id={`${getHeadingId(section.h2)}-h3`}>{section.h3}</h3>
-              <p>Gunakan data lapangan seperti luas area, volume material, titik buang, akses masuk, dan kondisi tanah untuk menentukan metode kerja yang paling efisien.</p>
+              <p set:html={linkInternalKeyword('Gunakan data lapangan seperti luas area, volume material, titik buang, akses masuk, dan kondisi tanah untuk menentukan metode kerja yang paling efisien.')} />
               <h4 id={`${getHeadingId(section.h2)}-h4`}>{section.h4}</h4>
-              <p>Dokumentasikan kebutuhan unit, operator, bahan bakar, ritase, serta jadwal mobilisasi sebelum pekerjaan dimulai agar biaya sewa lebih mudah dikontrol.</p>
+              <p set:html={linkInternalKeyword('Dokumentasikan kebutuhan unit, operator, bahan bakar, ritase, serta jadwal mobilisasi sebelum pekerjaan dimulai agar biaya sewa lebih mudah dikontrol.')} />
               <h5 id={`${getHeadingId(section.h2)}-h5`}>{section.h5}</h5>
-              <p>Pastikan seluruh pihak memahami lingkup pekerjaan, jam operasional, standar keselamatan, dan target progress harian.</p>
+              <p set:html={linkInternalKeyword('Pastikan seluruh pihak memahami lingkup pekerjaan, jam operasional, standar keselamatan, dan target progress harian.')} />
             </section>
           ))}
         </div>
@@ -169,6 +182,17 @@ const formatDate = (date?: string) =>
 
   .article-date time {
     color: var(--green);
+  }
+
+  .article-main :global(.internal-link) {
+    color: var(--green);
+    font-weight: 850;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .article-main :global(.internal-link:hover) {
+    color: var(--green-2);
   }
 
   .toc {

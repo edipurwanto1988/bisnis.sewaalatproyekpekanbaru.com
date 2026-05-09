@@ -54,7 +54,8 @@ export const heavyEquipment = [
   'pile driver',
   'bor pile machine',
   'scissor lift',
-  'boom lift'
+  'boom lift',
+  'container'
 ];
 
 const baseArticles: Article[] = [
@@ -636,7 +637,8 @@ const extraTopics: Topic[] = [
   { slug: 'sewa-alat-berat-ruko-pekanbaru', title: 'Sewa Alat Berat Ruko Pekanbaru', description: 'Alat berat untuk pembangunan ruko: mini excavator, concrete pump, forklift, genset, dan dump truck.', keyword: 'sewa alat berat ruko Pekanbaru', category: 'Komersial', focus: 'pembangunan ruko', unit: 'mini excavator dan concrete pump', job: 'pondasi dan pengecoran', terrain: 'lahan komersial' },
   { slug: 'sewa-alat-berat-harian-pekanbaru', title: 'Sewa Alat Berat Harian Pekanbaru', description: 'Sewa harian cocok untuk pekerjaan cepat, volume kecil, bongkar muat, galian singkat, dan perbaikan akses.', keyword: 'sewa alat berat harian Pekanbaru', category: 'Harga', focus: 'sewa harian', unit: 'alat berat sesuai kebutuhan', job: 'pekerjaan singkat', terrain: 'lokasi siap kerja' },
   { slug: 'sewa-alat-berat-bulanan-pekanbaru', title: 'Sewa Alat Berat Bulanan Pekanbaru', description: 'Sewa bulanan lebih efisien untuk proyek berkelanjutan seperti jalan, perkebunan, industri, dan infrastruktur.', keyword: 'sewa alat berat bulanan Pekanbaru', category: 'Harga', focus: 'sewa bulanan', unit: 'alat berat proyek', job: 'pekerjaan jangka panjang', terrain: 'proyek berkelanjutan' },
-  { slug: 'kontrak-sewa-alat-berat-pekanbaru', title: 'Kontrak Sewa Alat Berat Pekanbaru yang Perlu Dipahami', description: 'Poin penting dalam kontrak sewa alat berat: durasi, jam kerja, BBM, operator, mobilisasi, downtime, dan pembayaran.', keyword: 'kontrak sewa alat berat Pekanbaru', category: 'Kontrak', focus: 'kontrak sewa', unit: 'semua alat berat', job: 'pengaturan kerja dan biaya', terrain: 'semua proyek' }
+  { slug: 'kontrak-sewa-alat-berat-pekanbaru', title: 'Kontrak Sewa Alat Berat Pekanbaru yang Perlu Dipahami', description: 'Poin penting dalam kontrak sewa alat berat: durasi, jam kerja, BBM, operator, mobilisasi, downtime, dan pembayaran.', keyword: 'kontrak sewa alat berat Pekanbaru', category: 'Kontrak', focus: 'kontrak sewa', unit: 'semua alat berat', job: 'pengaturan kerja dan biaya', terrain: 'semua proyek' },
+  { slug: 'sewa-container-pekanbaru', title: 'Sewa Container Pekanbaru untuk Gudang dan Kantor Proyek', description: 'Sewa container Pekanbaru untuk gudang sementara, kantor proyek, storage material, dan kebutuhan penyimpanan di lokasi konstruksi.', keyword: 'sewa container Pekanbaru', category: 'Container', focus: 'penyimpanan proyek', unit: 'container', job: 'gudang dan kantor proyek', terrain: 'lokasi konstruksi' }
 ];
 
 const createArticle = (topic: Topic): Article => ({
@@ -1180,8 +1182,172 @@ const createMaintenanceArticle = (topic: MaintenanceTopic): Article => {
   };
 };
 
+const molenArticle: Article = {
+  slug: 'sewa-molen-pekanbaru',
+  title: 'Sewa Molen Pekanbaru untuk Pengecoran Proyek Kecil dan Menengah',
+  description: 'Panduan lengkap sewa molen Pekanbaru untuk pengecoran rumah, ruko, jalan lingkungan, drainase, pagar, lantai kerja, dan pekerjaan beton skala kecil hingga menengah.',
+  keyword: 'sewa molen Pekanbaru',
+  category: 'Beton',
+  publishedDate: '2024-01-01',
+  sections: [
+    {
+      h2: 'Mengapa Sewa Molen Pekanbaru Masih Banyak Dibutuhkan',
+      paragraphs: [
+        'Sewa molen Pekanbaru tetap menjadi pilihan praktis untuk pekerjaan beton yang membutuhkan adukan konsisten tetapi belum memerlukan batching plant, concrete mixer truck, atau concrete pump. Pada proyek rumah tinggal, ruko, pagar, drainase kecil, lantai kerja, pondasi ringan, rabat beton, dan perbaikan jalan lingkungan, molen membantu tim lapangan mencampur semen, pasir, kerikil, dan air dengan ritme yang lebih stabil dibanding adukan manual. Hasil campuran yang lebih merata membuat pekerjaan pengecoran lebih cepat, mengurangi tenaga fisik pekerja, dan membantu menjaga mutu beton dasar agar tidak terlalu bergantung pada perkiraan manual setiap tukang.',
+        'Di Pekanbaru, kebutuhan molen sering muncul pada proyek yang aksesnya terbatas, volume cor tidak terlalu besar, atau lokasi pekerjaan belum ideal untuk armada besar. Banyak area perumahan, gang, halaman ruko, kebun, dan bangunan renovasi tidak memungkinkan truck mixer masuk sampai titik kerja. Dalam situasi seperti itu, molen dapat ditempatkan dekat area pengecoran sehingga jarak angkut adukan lebih pendek. Dengan penataan material yang rapi, pekerja dapat menjaga alur produksi beton tanpa menunggu kiriman ready mix atau mengandalkan pengadukan manual yang lebih lambat.'
+      ],
+      h3: 'Kondisi Proyek yang Cocok Menggunakan Molen',
+      h4: 'Perbedaan Molen dengan Adukan Manual',
+      h5: 'Kapan Molen Lebih Efisien Dipilih',
+      table: {
+        headers: ['Kebutuhan Proyek', 'Alasan Memakai Molen', 'Catatan Lapangan'],
+        rows: [
+          ['Renovasi rumah', 'Volume cor sedang dan akses terbatas', 'Siapkan area material dekat molen'],
+          ['Drainase kecil', 'Campuran lebih konsisten sepanjang pekerjaan', 'Jaga rasio air agar beton tidak encer'],
+          ['Rabat beton', 'Produksi adukan bisa mengikuti ritme tukang', 'Pastikan jalur angkut adukan aman'],
+          ['Pagar dan kolom ringan', 'Lebih cepat daripada adukan manual', 'Gunakan takaran material yang sama']
+        ]
+      }
+    },
+    {
+      h2: 'Jenis Pekerjaan yang Umum Memakai Sewa Molen',
+      paragraphs: [
+        'Molen banyak dipakai untuk pengecoran struktur ringan dan pekerjaan beton non-massal. Contohnya adalah lantai rumah, teras, halaman, jalan setapak, rabat beton, sloof, kolom praktis, balok kecil, pondasi batu kali dengan campuran beton, saluran drainase, tutup parit, dudukan mesin, dan pengecoran area servis. Untuk proyek ruko, molen berguna saat pekerjaan dilakukan bertahap dan volume harian tidak cukup besar untuk memesan ready mix. Unit ini juga membantu pekerjaan perbaikan cepat karena dapat mulai bekerja setelah material dan operator siap di lokasi.',
+        'Meski fleksibel, molen bukan solusi untuk semua pengecoran. Untuk volume beton sangat besar, mutu beton struktural tinggi, atau pekerjaan yang membutuhkan suplai beton sangat cepat, ready mix dan concrete pump biasanya lebih tepat. Namun untuk proyek skala kecil sampai menengah, molen memberi kendali yang baik terhadap jadwal dan volume. Pemilik proyek dapat mencampur beton sesuai kebutuhan harian tanpa khawatir kelebihan beton dalam jumlah besar. Kunci keberhasilannya adalah disiplin takaran, kualitas material, waktu pengadukan, dan koordinasi pekerja yang membawa adukan ke titik cor.'
+      ],
+      h3: 'Pekerjaan Beton Skala Kecil dan Menengah',
+      h4: 'Batasan Penggunaan Molen di Lapangan',
+      h5: 'Menyesuaikan Volume Cor Harian',
+      table: {
+        headers: ['Jenis Pekerjaan', 'Cocok Menggunakan Molen', 'Alternatif Jika Volume Besar'],
+        rows: [
+          ['Lantai kerja', 'Ya, terutama untuk area terbatas', 'Ready mix jika area sangat luas'],
+          ['Kolom praktis', 'Ya, dengan takaran konsisten', 'Concrete pump untuk gedung bertingkat'],
+          ['Jalan lingkungan', 'Ya, untuk segmen pendek', 'Truck mixer untuk segmen panjang'],
+          ['Pondasi ringan', 'Ya, jika volume bertahap', 'Batching plant untuk proyek besar']
+        ]
+      }
+    },
+    {
+      h2: 'Cara Menentukan Kapasitas Molen yang Tepat',
+      paragraphs: [
+        'Sebelum menyewa molen, tentukan kebutuhan kapasitas berdasarkan volume beton, jumlah pekerja, waktu kerja, dan jarak dari area pengadukan ke titik pengecoran. Molen yang terlalu kecil membuat pekerjaan sering berhenti karena adukan tidak mengejar ritme tukang. Sebaliknya, molen yang terlalu besar bisa tidak efisien jika pekerja pengangkut adukan sedikit atau area kerja sempit. Dalam praktik proyek kecil, yang paling penting bukan hanya ukuran tabung molen, tetapi keseimbangan antara kapasitas aduk, kecepatan angkut, dan kemampuan tim meratakan atau memadatkan beton.',
+        'Hitung volume beton secara sederhana dari panjang, lebar, dan tebal pengecoran. Tambahkan cadangan secukupnya untuk kehilangan material, perataan permukaan, dan toleransi lapangan. Setelah volume diketahui, rencanakan berapa kali pengadukan yang dibutuhkan dalam satu hari. Siapkan juga tempat pasir, kerikil, semen, air, dan jalur gerobak atau ember agar pekerja tidak saling mengganggu. Penataan area ini sering menentukan apakah sewa molen benar-benar hemat, karena molen yang bagus tetap lambat jika material jauh, air sulit dijangkau, atau jalur angkut adukan berantakan.'
+      ],
+      h3: 'Menghitung Volume Beton Sebelum Sewa',
+      h4: 'Kapasitas Tabung dan Ritme Pekerja',
+      h5: 'Area Material yang Perlu Disiapkan',
+      table: {
+        headers: ['Faktor', 'Pengaruh ke Kapasitas', 'Rekomendasi'],
+        rows: [
+          ['Volume beton', 'Menentukan jumlah adukan harian', 'Hitung dari dimensi aktual'],
+          ['Jumlah pekerja', 'Menentukan kecepatan angkut dan tuang', 'Sesuaikan dengan kapasitas molen'],
+          ['Jarak titik cor', 'Mempengaruhi waktu siklus', 'Tempatkan molen sedekat mungkin'],
+          ['Ketersediaan air', 'Mempengaruhi konsistensi campuran', 'Sediakan sumber air stabil']
+        ]
+      }
+    },
+    {
+      h2: 'Persiapan Lokasi Sebelum Molen Datang',
+      paragraphs: [
+        'Persiapan lokasi sangat menentukan kelancaran sewa molen Pekanbaru. Sebelum unit datang, pastikan area kerja cukup datar, tidak tergenang, dan aman untuk menempatkan molen. Sediakan ruang untuk material pasir, kerikil, semen, dan air dengan jarak yang tidak terlalu jauh dari unit. Jika pekerjaan berada di dalam gang atau halaman sempit, cek lebar akses dan posisi putar agar unit bisa ditempatkan tanpa menghambat kendaraan lain. Area pengadukan juga sebaiknya tidak terlalu dekat dengan lubang galian, tepi parit, atau permukaan tanah yang mudah longsor.',
+        'Selain ruang kerja, siapkan tenaga yang bertugas menakar material, memasukkan campuran, mengangkut adukan, meratakan beton, dan membersihkan area. Setiap orang perlu memahami urutan kerja agar molen tidak berhenti terlalu lama. Semen harus terlindung dari hujan, pasir dan kerikil sebaiknya tidak tercampur lumpur, dan air harus tersedia dalam jumlah cukup. Bila pekerjaan dilakukan saat musim hujan, siapkan terpal untuk melindungi material dan rencana jeda kerja agar kualitas adukan tidak rusak oleh air hujan yang berlebihan.'
+      ],
+      h3: 'Area Datar dan Aman untuk Penempatan Unit',
+      h4: 'Penataan Pasir, Kerikil, Semen, dan Air',
+      h5: 'Antisipasi Cuaca Saat Pengecoran',
+      table: {
+        headers: ['Persiapan', 'Tujuan', 'Risiko Jika Diabaikan'],
+        rows: [
+          ['Area datar', 'Molen stabil saat berputar', 'Unit bergeser atau tidak aman'],
+          ['Material dekat', 'Mengurangi waktu tunggu', 'Produksi adukan lambat'],
+          ['Semen terlindung', 'Menjaga kualitas bahan', 'Semen menggumpal'],
+          ['Jalur angkut rapi', 'Pekerja lebih aman', 'Adukan tumpah dan waktu terbuang']
+        ]
+      }
+    },
+    {
+      h2: 'Tips Menjaga Mutu Adukan Beton dengan Molen',
+      paragraphs: [
+        'Mutu beton dari molen sangat dipengaruhi oleh takaran material, kualitas bahan, kadar air, dan waktu pengadukan. Gunakan takaran yang sama untuk setiap batch agar hasil cor lebih konsisten. Hindari menambah air berlebihan hanya karena ingin adukan terlihat lebih mudah dituang, karena beton yang terlalu encer cenderung turun mutunya, mudah retak rambut, dan kurang kuat setelah mengeras. Jika pasir terlalu basah karena hujan, kurangi tambahan air dan perhatikan tekstur campuran. Kebiasaan kecil seperti ini memberi dampak besar terhadap hasil pengecoran.',
+        'Waktu pengadukan juga perlu cukup agar semen menyelimuti agregat secara merata. Jangan memasukkan material melebihi kapasitas molen karena campuran bisa tidak homogen dan motor penggerak bekerja terlalu berat. Setelah beton dituang, lakukan perataan, pemadatan manual, dan finishing sesuai kebutuhan. Pada lantai atau rabat beton, curing atau perawatan setelah cor penting dilakukan agar beton tidak kehilangan air terlalu cepat. Siram permukaan secara berkala atau tutup dengan bahan lembap sesuai kondisi lapangan, terutama saat cuaca Pekanbaru sedang panas.'
+      ],
+      h3: 'Takaran Material yang Konsisten',
+      h4: 'Kadar Air dan Waktu Pengadukan',
+      h5: 'Perawatan Beton Setelah Pengecoran',
+      table: {
+        headers: ['Aspek Mutu', 'Praktik yang Dianjurkan', 'Dampak Positif'],
+        rows: [
+          ['Takaran', 'Gunakan ukuran sama setiap batch', 'Campuran lebih konsisten'],
+          ['Air', 'Tambahkan bertahap sesuai kebutuhan', 'Beton tidak terlalu encer'],
+          ['Waktu aduk', 'Biarkan campuran homogen', 'Semen menyelimuti agregat'],
+          ['Curing', 'Jaga kelembapan setelah cor', 'Mengurangi risiko retak']
+        ]
+      }
+    },
+    {
+      h2: 'Komponen Biaya Sewa Molen Pekanbaru',
+      paragraphs: [
+        'Biaya sewa molen Pekanbaru biasanya dipengaruhi oleh durasi pemakaian, kapasitas unit, lokasi proyek, kebutuhan operator, kondisi akses, serta apakah pengiriman dan penjemputan unit termasuk dalam penawaran. Untuk pekerjaan singkat, sewa harian sering lebih praktis. Untuk proyek bertahap seperti renovasi rumah atau pembangunan ruko kecil, durasi beberapa hari bisa lebih efisien karena unit tetap tersedia di lokasi. Pastikan rincian biaya ditanyakan sejak awal agar tidak muncul perbedaan pemahaman setelah pekerjaan berjalan.',
+        'Selain biaya sewa unit, perhitungkan biaya material, tenaga kerja, air, listrik atau bahan bakar jika dibutuhkan, alat bantu angkut, serta waktu pembersihan setelah selesai. Molen harus dibersihkan sebelum sisa beton mengeras di dalam tabung. Jika pembersihan diabaikan, kapasitas tabung berkurang dan unit bisa rusak. Karena itu, jadwal kerja sebaiknya menyisakan waktu untuk membersihkan unit, merapikan area material, dan memastikan tidak ada sisa adukan yang mengganggu drainase atau jalan lingkungan sekitar proyek.'
+      ],
+      h3: 'Sewa Harian dan Pemakaian Bertahap',
+      h4: 'Pengiriman, Operator, dan Biaya Tambahan',
+      h5: 'Pembersihan Unit Setelah Selesai',
+      table: {
+        headers: ['Komponen Biaya', 'Perlu Ditanyakan', 'Catatan'],
+        rows: [
+          ['Durasi sewa', 'Harian atau beberapa hari', 'Sesuaikan dengan jadwal cor'],
+          ['Mobilisasi', 'Termasuk antar jemput atau tidak', 'Lokasi jauh bisa berbeda biaya'],
+          ['Operator', 'Disediakan atau dari pihak proyek', 'Pastikan tanggung jawab jelas'],
+          ['Pembersihan', 'Siapa yang membersihkan unit', 'Hindari beton mengeras di tabung']
+        ]
+      }
+    },
+    {
+      h2: 'Keselamatan Kerja Saat Menggunakan Molen',
+      paragraphs: [
+        'Penggunaan molen terlihat sederhana, tetapi tetap membutuhkan disiplin keselamatan. Pekerja tidak boleh memasukkan tangan, sekop, atau benda lain ke bagian tabung yang sedang berputar. Area sekitar pulley, belt, mesin, dan kabel harus dijaga dari pakaian longgar atau material yang dapat tersangkut. Gunakan sepatu kerja, sarung tangan, dan kacamata pelindung saat menangani semen, agregat, dan air semen. Semen basah dapat mengiritasi kulit, sementara serpihan material bisa membahayakan mata saat proses pengisian atau pembersihan.',
+        'Pastikan molen ditempatkan di permukaan stabil dan tidak miring berlebihan. Jika menggunakan listrik, kabel harus aman dari genangan air, sambungan terlindung, dan kapasitas daya mencukupi. Jika menggunakan mesin berbahan bakar, perhatikan ventilasi dan jauhkan bahan bakar dari sumber panas. Anak-anak, warga sekitar, atau pekerja yang tidak berkepentingan sebaiknya tidak berada terlalu dekat dengan area pengadukan. Dengan pengaturan sederhana ini, pekerjaan pengecoran menjadi lebih aman, tertib, dan tidak mengganggu lingkungan sekitar.'
+      ],
+      h3: 'Bahaya Putaran Tabung dan Komponen Mesin',
+      h4: 'APD untuk Pekerja Pengecoran',
+      h5: 'Pengamanan Kabel, Mesin, dan Area Kerja',
+      table: {
+        headers: ['Risiko', 'Pencegahan', 'Manfaat'],
+        rows: [
+          ['Tersangkut tabung', 'Jangan menyentuh bagian berputar', 'Mencegah cedera serius'],
+          ['Iritasi semen', 'Gunakan sarung tangan dan sepatu', 'Kulit lebih terlindungi'],
+          ['Kabel basah', 'Jauhkan dari genangan', 'Mengurangi risiko listrik'],
+          ['Area ramai', 'Beri batas kerja', 'Pekerjaan lebih tertib']
+        ]
+      }
+    },
+    {
+      h2: 'Kesimpulan Sewa Molen untuk Proyek di Pekanbaru',
+      paragraphs: [
+        'Sewa molen Pekanbaru adalah solusi efisien untuk pekerjaan beton skala kecil sampai menengah yang membutuhkan campuran lebih konsisten daripada adukan manual. Unit ini cocok untuk renovasi rumah, ruko, drainase, rabat beton, lantai kerja, pondasi ringan, pagar, dan pekerjaan perbaikan yang volume betonnya bertahap. Dengan molen, proyek dapat mengatur produksi adukan sesuai kebutuhan lapangan, mengurangi pemborosan, dan tetap menjaga ritme kerja meskipun akses lokasi terbatas.',
+        'Agar hasilnya optimal, siapkan data volume beton, kondisi akses, lokasi penempatan unit, ketersediaan material, air, tenaga kerja, dan jadwal pengecoran sebelum memesan. Pastikan juga penawaran sewa menjelaskan durasi, biaya mobilisasi, operator, tanggung jawab bahan bakar atau listrik, serta pembersihan unit setelah selesai. Perencanaan yang rapi membuat sewa molen lebih hemat, pekerjaan beton lebih terkendali, dan hasil cor lebih sesuai dengan kebutuhan proyek di Pekanbaru.'
+      ],
+      h3: 'Ringkasan Manfaat Sewa Molen',
+      h4: 'Checklist Sebelum Menghubungi Penyedia',
+      h5: 'Langkah Berikutnya untuk Pengecoran',
+      table: {
+        headers: ['Checklist Akhir', 'Keterangan', 'Status Ideal'],
+        rows: [
+          ['Volume beton', 'Sudah dihitung dari ukuran pekerjaan', 'Siap sebelum sewa'],
+          ['Material', 'Pasir, kerikil, semen, air tersedia', 'Dekat area molen'],
+          ['Tenaga kerja', 'Ada tim takar, angkut, dan finishing', 'Terkoordinasi'],
+          ['Keselamatan', 'APD dan batas area tersedia', 'Wajib diterapkan']
+        ]
+      }
+    }
+  ]
+};
+
 const allArticles = [
   longArticle,
+  molenArticle,
   ...baseArticles,
   ...extraTopics.map(createArticle),
   ...projectToolsTopics.map(createProjectToolArticle),
@@ -1190,7 +1356,7 @@ const allArticles = [
 
 export const articles: Article[] = allArticles.map((article, index) => ({
   ...article,
-  publishedDate: getStablePublicationDate(article.slug, index)
+  publishedDate: article.publishedDate ?? getStablePublicationDate(article.slug, index)
 }));
 
 export const featuredArticles = articles.slice(0, 6);
