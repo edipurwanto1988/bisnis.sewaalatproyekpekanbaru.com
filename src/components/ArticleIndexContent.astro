@@ -3,13 +3,21 @@ import type { Article } from '../data/articles';
 
 interface Props {
   pageArticles: Article[];
+  allArticles: Article[];
   totalArticles: number;
   currentPage: number;
   totalPages: number;
 }
 
-const { pageArticles, totalArticles, currentPage, totalPages } = Astro.props;
+const { pageArticles, allArticles, totalArticles, currentPage, totalPages } = Astro.props;
 const getPageUrl = (page: number) => (page === 1 ? '/artikel/' : `/artikel/page/${page}/`);
+const searchArticles = allArticles.map((article) => ({
+  title: article.title,
+  description: article.description,
+  category: article.category,
+  slug: article.slug,
+  publishedDate: article.publishedDate
+}));
 const pageItems = Array.from({ length: totalPages }, (_, index) => index + 1).filter((page) => {
   return page === 1 || page === totalPages || Math.abs(page - currentPage) <= 1;
 }).reduce<(number | string)[]>((items, page) => {
@@ -36,13 +44,18 @@ const formatDate = (date?: string) =>
   <section class="section article-index">
     <div class="container">
       <p class="eyebrow">Pusat artikel</p>
-      <h1>{totalArticles} Artikel SEO Sewa Alat Berat Pekanbaru</h1>
+      <h1>{totalArticles} Artikel Sewa Alat Berat Pekanbaru</h1>
       <p>Konten informatif untuk membantu memilih unit, memahami proses sewa, dan merencanakan pekerjaan konstruksi atau perkebunan di Pekanbaru.</p>
-      <div class="page-summary">
+      <div class="page-summary" id="page-summary">
         <span>Halaman {currentPage} dari {totalPages}</span>
         <span>9 artikel per halaman</span>
       </div>
-      <div class="grid">
+      <div class="search-wrap">
+        <label for="article-search">Cari judul artikel</label>
+        <input id="article-search" type="search" placeholder="Ketik judul artikel..." autocomplete="off" />
+        <p id="search-count" aria-live="polite"></p>
+      </div>
+      <div class="grid" id="page-grid">
         {pageArticles.map((article) => (
           <article class="card">
             <div class="meta">
@@ -54,8 +67,9 @@ const formatDate = (date?: string) =>
           </article>
         ))}
       </div>
+      <div class="grid" id="search-grid" hidden></div>
 
-      <nav class="pagination" aria-label="Navigasi halaman artikel">
+      <nav class="pagination" id="pagination" aria-label="Navigasi halaman artikel">
         <a class={currentPage === 1 ? 'disabled' : ''} href={currentPage === 1 ? undefined : getPageUrl(currentPage - 1)}>Sebelumnya</a>
         <div>
           {pageItems.map((item) =>
@@ -71,6 +85,7 @@ const formatDate = (date?: string) =>
     </div>
   </section>
 </main>
+<script type="application/json" id="article-search-data" set:html={JSON.stringify(searchArticles)} />
 
 <style>
   .article-index {
@@ -108,11 +123,51 @@ const formatDate = (date?: string) =>
     background: #f7f9f6;
   }
 
+  .search-wrap {
+    display: grid;
+    gap: 8px;
+    max-width: 520px;
+    margin-top: 24px;
+  }
+
+  .search-wrap label {
+    color: var(--ink);
+    font-weight: 850;
+  }
+
+  .search-wrap input {
+    width: 100%;
+    min-height: 46px;
+    padding: 0 14px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #ffffff;
+    color: var(--ink);
+    font: inherit;
+  }
+
+  .search-wrap input:focus {
+    outline: 2px solid rgba(30, 109, 95, 0.22);
+    border-color: var(--green-2);
+  }
+
+  .search-wrap p {
+    min-height: 22px;
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.92rem;
+    font-weight: 750;
+  }
+
   .grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 18px;
     margin-top: 32px;
+  }
+
+  .grid[hidden] {
+    display: none;
   }
 
   article {
@@ -214,3 +269,86 @@ const formatDate = (date?: string) =>
     }
   }
 </style>
+
+<script>
+  type SearchArticle = {
+    title: string;
+    description: string;
+    category: string;
+    slug: string;
+    publishedDate?: string;
+  };
+
+  const searchInput = document.querySelector<HTMLInputElement>('#article-search');
+  const searchCount = document.querySelector<HTMLElement>('#search-count');
+  const pageSummary = document.querySelector<HTMLElement>('#page-summary');
+  const pageGrid = document.querySelector<HTMLElement>('#page-grid');
+  const searchGrid = document.querySelector<HTMLElement>('#search-grid');
+  const pagination = document.querySelector<HTMLElement>('#pagination');
+  const searchData = document.querySelector<HTMLScriptElement>('#article-search-data');
+  const allArticles: SearchArticle[] = searchData?.textContent ? JSON.parse(searchData.textContent) : [];
+  const dateFormatter = new Intl.DateTimeFormat('id-ID', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'UTC'
+  });
+
+  const formatSearchDate = (date?: string) => {
+    return date ? dateFormatter.format(new Date(`${date}T00:00:00.000Z`)) : '';
+  };
+
+  const createArticleCard = (article: SearchArticle) => {
+    const card = document.createElement('article');
+    card.className = 'card';
+
+    const meta = document.createElement('div');
+    meta.className = 'meta';
+
+    const category = document.createElement('span');
+    category.textContent = article.category;
+    meta.append(category);
+
+    if (article.publishedDate) {
+      const time = document.createElement('time');
+      time.dateTime = article.publishedDate;
+      time.textContent = formatSearchDate(article.publishedDate);
+      meta.append(time);
+    }
+
+    const title = document.createElement('h2');
+    const link = document.createElement('a');
+    link.href = `/artikel/${article.slug}`;
+    link.textContent = article.title;
+    title.append(link);
+
+    const description = document.createElement('p');
+    description.textContent = article.description;
+
+    card.append(meta, title, description);
+    return card;
+  };
+
+  const updateSearch = () => {
+    const keyword = searchInput?.value.trim().toLowerCase() ?? '';
+    const isSearching = keyword.length > 0;
+    const matches = isSearching
+      ? allArticles.filter((article) => article.title.toLowerCase().includes(keyword))
+      : [];
+
+    if (pageSummary) pageSummary.hidden = isSearching;
+    if (pageGrid) pageGrid.hidden = isSearching;
+    if (pagination) pagination.hidden = isSearching;
+
+    if (searchGrid) {
+      searchGrid.hidden = !isSearching;
+      searchGrid.replaceChildren(...matches.map(createArticleCard));
+    }
+
+    if (searchCount) {
+      searchCount.textContent = keyword ? `${matches.length} artikel cocok dari seluruh artikel` : '';
+    }
+  };
+
+  searchInput?.addEventListener('input', updateSearch);
+</script>
